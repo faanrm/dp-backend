@@ -3,7 +3,6 @@
 /* eslint-disable quotes */
 /* eslint-disable linebreak-style */
 
-
 export const productSchema = {
   _id: { type: "string", format: "uuid" },
   name: { type: "string" },

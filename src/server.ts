@@ -1,46 +1,43 @@
 /* eslint-disable linebreak-style */
-import fastify from 'fastify';
-
-import db from './plugins/db';
-import healthHandler from './modules/health/routes';
-import productsHandler from './modules/products/routes';
+import fastify from "fastify";
+import db from "./config/db";
+import productsHandler from "./modules/products/routes";
 
 function createServer() {
-	const server = fastify();
-	server.register(require('fastify-cors'));
+  const server = fastify();
+  server.register(require("fastify-cors"));
 
-	server.register(require('fastify-oas'), {
-		routePrefix: '/docs',
-		exposeRoute: true,
-		swagger: {
-			info: {
-				title: 'product api',
-				description: 'api documentation',
-				version: '0.1.0'
-			},
-			servers: [
-				{ url: 'http://localhost:3000', description: 'development' },
-				{
-					url: 'https://<production-url>',
-					description: 'production'
-				}
-			],
-			schemes: ['http'],
-			consumes: ['application/json'],
-			produces: ['application/json'],
-		}
-	});
+  server.register(require("fastify-oas"), {
+    routePrefix: "/api",
+    exposeRoute: true,
+    swagger: {
+      info: {
+        title: "design pattern backend api",
+        description: "api documentation",
+        version: "0.1.0",
+      },
+      servers: [
+        { url: "http://localhost:3000", description: "development" },
+        {
+          url: "https://<production-url>",
+          description: "production",
+        },
+      ],
+      schemes: ["http"],
+      consumes: ["application/json"],
+      produces: ["application/json"],
+    },
+  });
 
-	server.register(db);
-	server.register(healthHandler, { prefix: '/health' });
-	server.register(productsHandler, { prefix: '/product' });
+  server.register(db);
+  server.register(productsHandler, { prefix: "/product" });
 
-	server.setErrorHandler((error, req, res) => {
-		req.log.error(error.toString());
-		res.send({ error });
-	});
+  server.setErrorHandler((error, req, res) => {
+    req.log.error(error.toString());
+    res.send({ error });
+  });
 
-	return server;
+  return server;
 }
 
 export default createServer;
