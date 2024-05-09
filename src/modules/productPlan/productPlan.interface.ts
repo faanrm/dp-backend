@@ -10,7 +10,7 @@ export interface IProductPlan {
   updated_at: Date;
 }
 
-enum Status {
+export enum Status {
   in_progress,
   finish,
 }
