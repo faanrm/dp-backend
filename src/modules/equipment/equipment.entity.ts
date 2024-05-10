@@ -33,6 +33,7 @@ export class Equipment {
   updated_at: Date;
   @ManyToMany(() => ProductPlan, (operation) => operation.equipment)
   productPlans: ProductPlan[];
+
   public clone(): Equipment {
     const clonedEquipment: DeepPartial<Equipment> = {
       state: this.state,

@@ -2,6 +2,8 @@
 import { listProductsSchema, deleteProductSchema } from "./schema";
 
 export default function productHandler(server, options, next) {
+
+  
   server.get("/", { schema: listProductsSchema }, async (req, res) => {
     req.log.info("list products from db");
     const products = await server.db.products.find();

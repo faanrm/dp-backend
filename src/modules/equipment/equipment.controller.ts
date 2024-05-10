@@ -1,13 +1,10 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { IEquipment } from "./equipment.interface";
 import { equipmentService } from "./equipment.service";
-export default async function equipmentController(
-  route: FastifyInstance,
-  server
-) {
+export default async function equipmentController(server) {
   const serv = equipmentService(server);
 
-  route.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
+  server.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const equipments = await serv.getAllEquipment();
       reply.code(200).send(equipments);
@@ -20,7 +17,7 @@ export default async function equipmentController(
     }
   });
 
-  route.get(
+  server.get(
     "/:id",
     async (
       request: FastifyRequest<{ Params: IEquipment }>,
@@ -35,7 +32,7 @@ export default async function equipmentController(
     }
   );
 
-  route.post("/", async (request: FastifyRequest, reply: FastifyReply) => {
+  server.post("/", async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const newEquipment = await serv.createEquipment(request.body);
       reply.code(201).send(newEquipment);
@@ -44,7 +41,7 @@ export default async function equipmentController(
     }
   });
 
-  route.put(
+  server.put(
     "/:id",
     async (
       request: FastifyRequest<{ Params: IEquipment }>,
@@ -63,7 +60,7 @@ export default async function equipmentController(
     }
   );
 
-  route.delete(
+  server.delete(
     "/:id",
     async (
       request: FastifyRequest<{ Params: IEquipment }>,

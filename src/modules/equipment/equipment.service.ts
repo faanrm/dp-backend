@@ -1,7 +1,6 @@
 import { Repository, DeepPartial } from "typeorm";
 import { Equipment } from "./equipment.entity";
 import { IEquipment } from "./equipment.interface";
-
 export const equipmentService = (server) => {
   const createEquipment = async (
     equipmentData: DeepPartial<IEquipment>
