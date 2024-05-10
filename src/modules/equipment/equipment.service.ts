@@ -1,17 +1,31 @@
-import { Repository, DeepPartial } from "typeorm";
+import { DeepPartial } from "typeorm";
 import { Equipment } from "./equipment.entity";
-import { IEquipment } from "./equipment.interface";
+import { IEquipment, EType, IState } from "./equipment.interface";
+
 export const equipmentService = (server) => {
   const createEquipment = async (
     equipmentData: DeepPartial<IEquipment>
   ): Promise<IEquipment> => {
-    const clonedEquipment = new Equipment().clone();
-    Object.assign(clonedEquipment, equipmentData);
-    return await server.db.equipments.save(clonedEquipment);
+    const createdEquipment = new Equipment().clone();
+    Object.assign(createdEquipment, equipmentData);
+    return await server.db.equipments.save(createdEquipment);
   };
 
-  const getAllEquipment = async (): Promise<IEquipment[]> => {
-    return await server.db.equipments.find();
+  const getAllEquipment = async (options?: {
+    state?: IState | undefined;
+    type?: EType[] | undefined;
+  }): Promise<IEquipment[]> => {
+    const query = server.db.equipments.createQueryBuilder("equipment");
+
+    if (options?.state) {
+      query.where("equipment.state = :state", { state: options.state });
+    }
+
+    if (options?.type) {
+      query.andWhere("equipment.type IN (:...type)", { type: options.type });
+    }
+
+    return await query.getMany();
   };
 
   const getOneEquipment = async (id: string): Promise<IEquipment> => {
@@ -34,23 +48,10 @@ export const equipmentService = (server) => {
     return await server.db.equipments.save(equipmentToUpdate);
   };
 
-  const deleteEquipment = async (id: string): Promise<void> => {
-    const equipmentToDelete = await server.db.equipments.findOne({
-      _id: id,
-    });
-
-    if (!equipmentToDelete) {
-      throw new Error("Equipment not found");
-    }
-
-    await server.db.equipments.remove(equipmentToDelete);
-  };
-
   return {
     createEquipment,
     getAllEquipment,
     getOneEquipment,
     updateEquipment,
-    deleteEquipment,
   };
 };

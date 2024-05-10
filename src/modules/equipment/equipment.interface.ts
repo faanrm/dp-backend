@@ -1,20 +1,21 @@
 import { IProductPlan } from "../productPlan/productPlan.interface";
 export interface IEquipment {
   _id: string;
-  state: State;
+  state: IState;
   type: EType;
+  uptime?: Date;
   created_at: Date;
   updated_at: Date;
   productPlans: IProductPlan[];
 }
 
-enum EType {
+export enum EType {
   machineForQuality,
   machineForMaintain,
   machineForProduction,
 }
 
-enum State {
+export enum IState {
   available,
   unavailable,
   maintenance,

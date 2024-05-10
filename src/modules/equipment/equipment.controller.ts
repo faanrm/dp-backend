@@ -1,6 +1,8 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { IEquipment } from "./equipment.interface";
 import { equipmentService } from "./equipment.service";
+import { IState } from "./equipment.interface";
+import { request } from "http";
 export default async function equipmentController(server) {
   const serv = equipmentService(server);
 
@@ -56,21 +58,6 @@ export default async function equipmentController(server) {
       } catch (error) {
         console.error(error);
         reply.code(500).send({ error: error.message });
-      }
-    }
-  );
-
-  server.delete(
-    "/:id",
-    async (
-      request: FastifyRequest<{ Params: IEquipment }>,
-      reply: FastifyReply
-    ) => {
-      try {
-        await serv.deleteEquipment(request.params._id);
-        reply.code(204).send();
-      } catch (error) {
-        reply.code(500).send(error);
       }
     }
   );

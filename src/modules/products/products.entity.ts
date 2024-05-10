@@ -7,9 +7,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { orderProduct } from "../orderProduct/orderProduct.entity";
-
+import { Equipment } from "../equipment/equipment.entity";
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn("uuid")
@@ -17,7 +19,6 @@ export class Product {
 
   @Column()
   quantity: number;
-
   @Column()
   description: string;
   @Column()
@@ -30,4 +31,17 @@ export class Product {
 
   @OneToMany(() => orderProduct, (productOrder) => productOrder.product)
   productOrders: orderProduct[];
+  @ManyToMany(() => Equipment)
+  @JoinTable()
+  equipments: Equipment[];
+  public clone(): Product {
+    return Object.assign(Object.create(Product.prototype), {
+      _id: this._id,
+      quantity: this.quantity,
+      description: this.description,
+      price: this.price,
+      productOrders: this.productOrders.map((po) => po.clone()),
+      equipments: this.equipments.map((eq) => eq.clone()),
+    }) as Product;
+  }
 }
