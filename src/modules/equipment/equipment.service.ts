@@ -47,17 +47,14 @@ export const equipmentService = (server) => {
     Object.assign(equipmentToUpdate, equipmentData);
     return await server.db.equipments.save(equipmentToUpdate);
   };
-  const changeEquipmentState = async (
-    id: string,
-    newState: IState
-  ): Promise<IEquipment> => {
+  const changeEquipmentState = async (id: string): Promise<IEquipment> => {
     const equipmentToUpdate = await server.db.equipments.findOne({ _id: id });
 
     if (!equipmentToUpdate) {
       throw new Error("Equipment not found");
     }
 
-    equipmentToUpdate.state = newState;
+    equipmentToUpdate.state = IState.busy;
     return await server.db.equipments.save(equipmentToUpdate);
   };
   return {

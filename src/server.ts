@@ -1,8 +1,8 @@
 /* eslint-disable linebreak-style */
 import fastify from "fastify";
 import db from "./config/db";
-import productsHandler from "./modules/products/routes";
 import equipmentHandler from "./modules/equipment/equipment.controller";
+import productHandler from "./modules/products/routes";
 function createServer() {
   const server = fastify();
   server.register(require("fastify-cors"));
@@ -30,7 +30,7 @@ function createServer() {
   });
 
   server.register(db);
-  server.register(productsHandler, { prefix: "/product" });
+  server.register(productHandler, { prefix: "/product" });
   server.register(equipmentHandler, { prefix: "/equipment" });
 
   server.setErrorHandler((error, req, res) => {
