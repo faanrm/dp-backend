@@ -25,10 +25,8 @@ export class Product {
   price: number;
   @CreateDateColumn()
   created_at: Date;
-
   @UpdateDateColumn()
   updated_at: Date;
-
   @OneToMany(() => orderProduct, (productOrder) => productOrder.product)
   productOrders: orderProduct[];
   @ManyToMany(() => Equipment)

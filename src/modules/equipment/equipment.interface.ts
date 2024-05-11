@@ -17,6 +17,7 @@ export enum EType {
 
 export enum IState {
   available,
+  busy,
   unavailable,
   maintenance,
   out,

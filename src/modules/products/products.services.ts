@@ -10,6 +10,7 @@ export const productsService = (server) => {
       .setQuantity(productData.quantity)
       .setDescription(productData.description)
       .setPrice(productData.price);
+
     const builtProduct = products.build();
     const createdProduct = new Product();
     Object.assign(createdProduct, builtProduct);
