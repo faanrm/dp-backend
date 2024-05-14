@@ -35,10 +35,6 @@ export class Product {
   @OneToMany(() => orderProduct, (productOrder) => productOrder.product)
   productOrders: orderProduct[];
 
-  @ManyToMany(() => Equipment)
-  @JoinTable()
-  equipments: Equipment[];
-
   @ManyToMany(() => Material, (material) => material.products, {
     cascade: true,
   })
@@ -62,7 +58,6 @@ export class Product {
       description: this.description,
       price: this.price,
       productOrders: this.productOrders.map((po) => po.clone()),
-      equipments: this.equipments.map((eq) => eq.clone()),
       materials: this.materials.map((mat) => mat.clone()),
     }) as Product;
   }

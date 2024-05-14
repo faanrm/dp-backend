@@ -7,7 +7,7 @@ import {
   ManyToMany,
 } from "typeorm";
 import { Product } from "../products/products.entity";
-
+import { Equipment } from "../equipment/equipment.entity";
 @Entity()
 export class Material {
   @PrimaryGeneratedColumn("uuid")
@@ -27,10 +27,10 @@ export class Material {
 
   @UpdateDateColumn()
   updated_at: Date;
-
   @ManyToMany(() => Product, (product) => product.materials)
   products: Product[];
-
+  @ManyToMany(() => Equipment, (eqp) => eqp.materials)
+  equipments: Equipment[];
   public clone(): Material {
     return Object.assign(Object.create(Material.prototype), {
       _id: this._id,

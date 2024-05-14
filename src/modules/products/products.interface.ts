@@ -6,7 +6,6 @@ export interface IProduct {
   description: string;
   price: number;
   productOrders: orderProduct[];
-  equipments: Equipment[];
   created_at: Date;
   updated_at: Date;
 }

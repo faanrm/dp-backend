@@ -4,7 +4,6 @@ class ProductBuilder {
   private quantity: number;
   private description: string;
   private price: number;
-  private equipments: Equipment[];
 
   constructor() {}
 
@@ -23,18 +22,12 @@ class ProductBuilder {
     return this;
   }
 
-  setEquipments(equipments: Equipment[]): ProductBuilder {
-    this.equipments = equipments;
-    return this;
-  }
-
   build(): IProduct {
     return {
       quantity: this.quantity,
       description: this.description,
       price: this.price,
       productOrders: [],
-      equipments: this.equipments,
       created_at: new Date(),
       updated_at: new Date(),
     };

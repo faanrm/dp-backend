@@ -8,6 +8,7 @@ import { orderProduct } from "../modules/orderProduct/orderProduct.entity";
 import { ProductPlan } from "../modules/productPlan/productPlan.entity";
 import { Material } from "../modules/material/material.entity";
 import { Component } from "../modules/components/components.entity";
+import { Operation } from "../modules/operation/operation.entity";
 export default fp(async (server) => {
   try {
     const connectionOptions = await getConnectionOptions();
@@ -20,6 +21,7 @@ export default fp(async (server) => {
         ProductPlan,
         Material,
         Component,
+        Operation,
       ],
     });
 

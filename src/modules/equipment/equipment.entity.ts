@@ -6,10 +6,11 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   DeepPartial,
+  JoinTable,
 } from "typeorm";
 import { ProductPlan } from "../productPlan/productPlan.entity";
 import { EType, IState } from "./equipment.interface";
-import { Product } from "../products/products.entity";
+import { Material } from "../material/material.entity";
 @Entity()
 export class Equipment {
   @PrimaryGeneratedColumn("uuid")
@@ -26,15 +27,28 @@ export class Equipment {
   updated_at: Date;
   @ManyToMany(() => ProductPlan, (operation) => operation.equipment)
   productPlans: ProductPlan[];
-  @ManyToMany(() => Product, (product) => product.equipments)
-  products: Product[];
+  @ManyToMany(() => Material, (mat) => mat.equipments, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: "operations",
+    joinColumn: {
+      name: "equipmentId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "materialId",
+      referencedColumnName: "_id",
+    },
+  })
+  materials: Material[];
   public clone(): Equipment {
     const clonedEquipment: DeepPartial<Equipment> = {
       state: this.state,
       type: this.type,
       uptime: this.uptime,
       productPlans: this.productPlans.map((plan) => plan.clone()),
-      products: this.products.map((product) => product.clone()),
+      materials: this.materials.map((material) => material.clone()),
     };
     const clone = Object.assign(new Equipment(), clonedEquipment);
     return clone;
