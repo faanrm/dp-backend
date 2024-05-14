@@ -1,5 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -12,6 +10,8 @@ import {
 } from "typeorm";
 import { orderProduct } from "../orderProduct/orderProduct.entity";
 import { Equipment } from "../equipment/equipment.entity";
+import { Material } from "../material/material.entity";
+
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn("uuid")
@@ -19,19 +19,42 @@ export class Product {
 
   @Column()
   quantity: number;
+
   @Column()
   description: string;
+
   @Column()
   price: number;
+
   @CreateDateColumn()
   created_at: Date;
+
   @UpdateDateColumn()
   updated_at: Date;
+
   @OneToMany(() => orderProduct, (productOrder) => productOrder.product)
   productOrders: orderProduct[];
+
   @ManyToMany(() => Equipment)
   @JoinTable()
   equipments: Equipment[];
+
+  @ManyToMany(() => Material, (material) => material.products, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: "components",
+    joinColumn: {
+      name: "productId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "materialId",
+      referencedColumnName: "_id",
+    },
+  })
+  materials: Material[];
+
   public clone(): Product {
     return Object.assign(Object.create(Product.prototype), {
       _id: this._id,
@@ -40,6 +63,7 @@ export class Product {
       price: this.price,
       productOrders: this.productOrders.map((po) => po.clone()),
       equipments: this.equipments.map((eq) => eq.clone()),
+      materials: this.materials.map((mat) => mat.clone()),
     }) as Product;
   }
 }

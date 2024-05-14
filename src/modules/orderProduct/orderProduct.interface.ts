@@ -6,6 +6,7 @@ export interface IOrderProduct {
   status: Status;
   created_at: Date;
   updated_at: Date;
+  order_number: number;
   product: any;
   product_Plans: any[];
 }

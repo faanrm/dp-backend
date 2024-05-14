@@ -6,12 +6,21 @@ import { Equipment } from "../modules/equipment/equipment.entity";
 import { Product } from "../modules/products/products.entity";
 import { orderProduct } from "../modules/orderProduct/orderProduct.entity";
 import { ProductPlan } from "../modules/productPlan/productPlan.entity";
+import { Material } from "../modules/material/material.entity";
+import { Component } from "../modules/components/components.entity";
 export default fp(async (server) => {
   try {
     const connectionOptions = await getConnectionOptions();
     Object.assign(connectionOptions, {
       options: { encrypt: true },
-      entities: [Product, Equipment, orderProduct, ProductPlan],
+      entities: [
+        Product,
+        Equipment,
+        orderProduct,
+        ProductPlan,
+        Material,
+        Component,
+      ],
     });
 
     const connection = await createConnection(connectionOptions);

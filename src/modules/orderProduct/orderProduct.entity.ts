@@ -32,6 +32,8 @@ export class orderProduct {
 
   @Column({ type: "enum", enum: Status, default: Status.in_progress })
   status: Status;
+  @Column()
+  order_number: number;
 
   @CreateDateColumn()
   created_at: Date;

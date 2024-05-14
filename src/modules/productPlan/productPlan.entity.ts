@@ -23,9 +23,6 @@ export class ProductPlan {
   @Column()
   estimate_duration: Date;
 
-  @Column()
-  real_date: Date;
-
   @Column({ type: "enum", enum: Status, default: Status.in_progress })
   status: Status;
 
@@ -44,7 +41,6 @@ export class ProductPlan {
   public clone(): ProductPlan {
     const clonedProductPlan: DeepPartial<ProductPlan> = {
       estimate_duration: this.estimate_duration,
-      real_date: this.real_date,
       status: this.status,
       equipment: this.equipment.map((equipment) => equipment.clone()),
     };
