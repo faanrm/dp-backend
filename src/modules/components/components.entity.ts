@@ -27,7 +27,6 @@ export class Component {
   @ManyToOne(() => Product)
   @JoinColumn({ name: "productId" })
   product: Product;
-
   @ManyToOne(() => Material)
   @JoinColumn({ name: "materialId" })
   material: Material;
