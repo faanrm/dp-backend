@@ -31,7 +31,10 @@ export default async function productHandler(server) {
   );
   server.post(
     "/",
-    async (request: FastifyRequest<{ Body: Product }>, reply: FastifyReply) => {
+    async (
+      request: FastifyRequest<{ Body: IProduct }>,
+      reply: FastifyReply
+    ) => {
       try {
         const product = await serv.createProduct(request.body);
         return reply.code(201).send(product);
@@ -71,6 +74,21 @@ export default async function productHandler(server) {
         return reply.code(200).send(product);
       } catch (error) {
         return reply.code(500).send({ error: error.message });
+      }
+    }
+  );
+  server.get(
+    "/:id",
+    async (
+      request: FastifyRequest<{ Params: { id: string } }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const productId = request.params.id;
+        const materials = await serv.getMaterialByProduct(productId);
+        reply.code(200).send(materials);
+      } catch (error) {
+        reply.code(500).send({ message: error.message });
       }
     }
   );

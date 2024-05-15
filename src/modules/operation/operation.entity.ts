@@ -6,7 +6,9 @@ import {
   Entity,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
+import { ProductPlan } from "../productPlan/productPlan.entity";
 import { Equipment } from "../equipment/equipment.entity";
 import { Material } from "../material/material.entity";
 @Entity("operations")
@@ -25,4 +27,7 @@ export class Operation {
   @ManyToOne(() => Material)
   @JoinColumn({ name: "materialId" })
   material: Material;
+  @ManyToOne(() => ProductPlan, (productPlan) => productPlan.operations)
+  @JoinColumn({ name: "productPlanId" })
+  productPlan: ProductPlan;
 }

@@ -1,8 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { IEquipment } from "./equipment.interface";
 import { equipmentService } from "./equipment.service";
-import { IState } from "./equipment.interface";
-import { request } from "http";
 export default async function equipmentController(server) {
   const serv = equipmentService(server);
 

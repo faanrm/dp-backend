@@ -9,13 +9,8 @@ import {
   DeepPartial,
 } from "typeorm";
 import { Product } from "../products/products.entity";
-import { ProductPlan } from "../productPlan/productPlan.entity";
+import { Status } from "./orderProduct.interface";
 
-enum Status {
-  in_progress,
-  delivered,
-  cancelled,
-}
 @Entity()
 export class orderProduct {
   @PrimaryGeneratedColumn("uuid")

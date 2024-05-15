@@ -7,9 +7,10 @@ import {
   ManyToMany,
   DeepPartial,
   JoinTable,
+  OneToMany,
 } from "typeorm";
-import { ProductPlan } from "../productPlan/productPlan.entity";
 import { EType, IState } from "./equipment.interface";
+import { Maintenance } from "../maintenance/maintenance.entity";
 import { Material } from "../material/material.entity";
 @Entity()
 export class Equipment {
@@ -21,11 +22,12 @@ export class Equipment {
   type: EType;
   @Column()
   uptime: Date;
+  @Column({ default: 6 })
+  lifePoint: number;
   @CreateDateColumn()
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
-
   @ManyToMany(() => Material, (mat) => mat.equipments, {
     cascade: true,
   })
@@ -41,6 +43,10 @@ export class Equipment {
     },
   })
   materials: Material[];
+  @OneToMany(() => Maintenance, (maintenance) => maintenance.equipment, {
+    cascade: true,
+  })
+  maintenancePlans: Maintenance[];
   public clone(): Equipment {
     const clonedEquipment: DeepPartial<Equipment> = {
       state: this.state,

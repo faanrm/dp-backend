@@ -8,9 +8,8 @@ export interface IOrderProduct {
   updated_at: Date;
   order_number: number;
   product: any;
-  product_Plans: any[];
 }
-enum Status {
+export enum Status {
   in_progress,
   delivered,
   cancelled,

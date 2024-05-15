@@ -1,7 +1,7 @@
 import { IProduct } from "./products.interface";
 import { DeepPartial } from "typeorm";
 import productBuilder from "./products.models";
-
+import { Material } from "../material/material.entity";
 export const productsService = (server) => {
   const createProduct = async (
     productData: DeepPartial<IProduct>
@@ -41,12 +41,21 @@ export const productsService = (server) => {
     }
     return product;
   };
-  const getComponents = async (id: number): Promise<void> => {};
+  const getMaterialByProduct = async (id: string): Promise<Material[]> => {
+    const product = await server.db.products.findOne(id, {
+      relations: ["materials"],
+    });
+    if (!product) {
+      throw new Error("Product not found");
+    }
+    return product.materials;
+  };
   return {
     createProduct,
     deleteProduct,
     updateProduct,
     getAllProducts,
     getProductById,
+    getMaterialByProduct,
   };
 };

@@ -10,12 +10,14 @@ import {
 } from "typeorm";
 import { orderProduct } from "../orderProduct/orderProduct.entity";
 import { Material } from "../material/material.entity";
-
+import { QualityControl } from "../qualityControl/qualityControl.entity";
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn("uuid")
   _id: string;
 
+  @Column()
+  name: string;
   @Column()
   quantity: number;
 
@@ -31,7 +33,9 @@ export class Product {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => orderProduct, (productOrder) => productOrder.product)
+  @OneToMany(() => orderProduct, (productOrder) => productOrder.product, {
+    cascade: true,
+  })
   productOrders: orderProduct[];
 
   @ManyToMany(() => Material, (material) => material.products, {
@@ -49,6 +53,8 @@ export class Product {
     },
   })
   materials: Material[];
+  @OneToMany(() => QualityControl, (qualityControl) => qualityControl.product)
+  qualityControls: QualityControl[];
 
   public clone(): Product {
     return Object.assign(Object.create(Product.prototype), {

@@ -9,11 +9,15 @@ import { ProductPlan } from "../modules/productPlan/productPlan.entity";
 import { Material } from "../modules/material/material.entity";
 import { Component } from "../modules/components/components.entity";
 import { Operation } from "../modules/operation/operation.entity";
+import { Maintenance } from "../modules/maintenance/maintenance.entity";
+import { QualityControl } from "../modules/qualityControl/qualityControl.entity";
 export default fp(async (server) => {
   try {
     const connectionOptions = await getConnectionOptions();
     Object.assign(connectionOptions, {
       options: { encrypt: true },
+      synchronize: true,
+      dropSchema: true,
       entities: [
         Product,
         Equipment,
@@ -22,6 +26,8 @@ export default fp(async (server) => {
         Material,
         Component,
         Operation,
+        Maintenance,
+        QualityControl,
       ],
     });
 
