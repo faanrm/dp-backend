@@ -1,13 +1,11 @@
-import { IOrderProduct } from "../orderProduct/orderProduct.interface";
-import { IEquipment } from "../equipment/equipment.interface";
 import { Status, IProductPlan } from "./productPlan.interface";
 
 class ProductPlanBuilder {
   private estimate_duration: Date;
-  private real_date: Date;
+  private startTime: Date;
+  private endTime: Date;
   private status: Status;
-  private order_Product: IOrderProduct;
-  private equipment: IEquipment[];
+
   constructor() {}
 
   setEstimate_Duration(estimate_duration: Date): ProductPlanBuilder {
@@ -15,8 +13,12 @@ class ProductPlanBuilder {
     return this;
   }
 
-  setReal_Date(real_date: Date): ProductPlanBuilder {
-    this.real_date = real_date;
+  setStart_Time(startTime: Date): ProductPlanBuilder {
+    this.startTime = startTime;
+    return this;
+  }
+  setEnd_Time(endTime: Date): ProductPlanBuilder {
+    this.endTime = endTime;
     return this;
   }
 
@@ -25,23 +27,12 @@ class ProductPlanBuilder {
     return this;
   }
 
-  setOrder_Product(order_Product: IOrderProduct): ProductPlanBuilder {
-    this.order_Product = order_Product;
-    return this;
-  }
-
-  setEquipment(equipments: IEquipment[]): ProductPlanBuilder {
-    this.equipment = equipments;
-    return this;
-  }
-
   build(): IProductPlan {
     return {
       estimate_duration: this.estimate_duration,
-      real_date: this.real_date,
+      startTime: this.startTime,
+      endTime: this.endTime,
       status: this.status,
-      order_Product: this.order_Product,
-      equipment: this.equipment,
       created_at: new Date(),
       updated_at: new Date(),
     };

@@ -1,20 +1,18 @@
 import { IProduct } from "./products.interface";
 import { DeepPartial } from "typeorm";
-import { Product } from "./products.entity";
-import products from "./products.models";
+import productBuilder from "./products.models";
+
 export const productsService = (server) => {
   const createProduct = async (
-    productData: DeepPartial<Product>
-  ): Promise<Product> => {
-    products
+    productData: DeepPartial<IProduct>
+  ): Promise<IProduct> => {
+    productBuilder
       .setQuantity(productData.quantity)
       .setDescription(productData.description)
       .setPrice(productData.price);
 
-    const builtProduct = products.build();
-    const createdProduct = new Product();
-    Object.assign(createdProduct, builtProduct);
-
+    const builtProduct = productBuilder.build();
+    const createdProduct = await server.db.products.save(builtProduct);
     return createdProduct;
   };
   const getAllProducts = async (): Promise<IProduct[]> => {
@@ -43,6 +41,7 @@ export const productsService = (server) => {
     }
     return product;
   };
+  const getComponents = async (id: number): Promise<void> => {};
   return {
     createProduct,
     deleteProduct,

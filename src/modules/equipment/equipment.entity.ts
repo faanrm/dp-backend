@@ -25,8 +25,7 @@ export class Equipment {
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
-  @ManyToMany(() => ProductPlan, (operation) => operation.equipment)
-  productPlans: ProductPlan[];
+
   @ManyToMany(() => Material, (mat) => mat.equipments, {
     cascade: true,
   })
@@ -47,7 +46,6 @@ export class Equipment {
       state: this.state,
       type: this.type,
       uptime: this.uptime,
-      productPlans: this.productPlans.map((plan) => plan.clone()),
       materials: this.materials.map((material) => material.clone()),
     };
     const clone = Object.assign(new Equipment(), clonedEquipment);

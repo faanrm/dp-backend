@@ -1,38 +1,31 @@
-import { IProduct } from "./products.interface";
-import { Equipment } from "../equipment/equipment.entity";
-class ProductBuilder {
-  private quantity: number;
-  private description: string;
-  private price: number;
+import { Product } from "./products.entity";
 
-  constructor() {}
+class ProductBuilder {
+  private product: Product;
+
+  constructor() {
+    this.product = Object.create(Product.prototype);
+  }
 
   setQuantity(quantity: number): ProductBuilder {
-    this.quantity = quantity;
+    this.product.quantity = quantity;
     return this;
   }
 
   setDescription(description: string): ProductBuilder {
-    this.description = description;
+    this.product.description = description;
     return this;
   }
 
   setPrice(price: number): ProductBuilder {
-    this.price = price;
+    this.product.price = price;
     return this;
   }
 
-  build(): IProduct {
-    return {
-      quantity: this.quantity,
-      description: this.description,
-      price: this.price,
-      productOrders: [],
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
+  build(): Product {
+    return this.product;
   }
 }
 
-const products = new ProductBuilder();
-export default products;
+const productBuilder = new ProductBuilder();
+export default productBuilder;

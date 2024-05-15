@@ -44,8 +44,6 @@ export class orderProduct {
   @ManyToOne(() => Product, (product) => product.productOrders)
   product: Product;
 
-  @OneToMany(() => ProductPlan, (productPlan) => productPlan.order_Product)
-  product_Plans: ProductPlan[];
   public clone(): orderProduct {
     const clonedOrderProduct: DeepPartial<orderProduct> = {
       _id: this._id,
@@ -54,9 +52,6 @@ export class orderProduct {
       delivery_date: this.delivery_date,
       status: this.status,
       product: this.product ? this.product.clone() : undefined,
-      product_Plans: this.product_Plans.map((productPlan) =>
-        productPlan.clone()
-      ),
     };
     const clone = Object.assign(new orderProduct(), clonedOrderProduct);
     return clone;

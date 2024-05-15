@@ -9,7 +9,6 @@ import {
   JoinTable,
 } from "typeorm";
 import { orderProduct } from "../orderProduct/orderProduct.entity";
-import { Equipment } from "../equipment/equipment.entity";
 import { Material } from "../material/material.entity";
 
 @Entity()
@@ -57,8 +56,6 @@ export class Product {
       quantity: this.quantity,
       description: this.description,
       price: this.price,
-      productOrders: this.productOrders.map((po) => po.clone()),
-      materials: this.materials.map((mat) => mat.clone()),
     }) as Product;
   }
 }
