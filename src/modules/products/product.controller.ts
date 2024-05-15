@@ -85,7 +85,7 @@ export default async function productHandler(server) {
     ) => {
       try {
         const productId = request.params.id;
-        const materials = await serv.getMaterialByProduct(productId);
+        const materials = await serv.getMaterialsByProduct(productId);
         reply.code(200).send(materials);
       } catch (error) {
         reply.code(500).send({ message: error.message });
