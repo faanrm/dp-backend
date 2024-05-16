@@ -46,14 +46,20 @@ export const equipmentService = (server) => {
     Object.assign(equipmentToUpdate, equipmentData);
     return await server.db.equipments.save(equipmentToUpdate);
   };
+  const deleteEquipment = async (id: string): Promise<void> => {
+    const equipment = await server.db.equipments.delete(id);
+    if (!equipment) {
+      throw new Error("Equipment not found");
+    }
+    return equipment;
+  };
   const changeEquipmentState = async (id: string): Promise<IEquipment> => {
     const equipmentToUpdate = await server.db.equipments.findOne({ _id: id });
 
     if (!equipmentToUpdate) {
       throw new Error("Equipment not found");
     }
-
-    equipmentToUpdate.state = IState.busy;
+    equipmentToUpdate.state = IState;
     return await server.db.equipments.save(equipmentToUpdate);
   };
   return {
@@ -62,5 +68,6 @@ export const equipmentService = (server) => {
     getAllEquipment,
     getOneEquipment,
     updateEquipment,
+    deleteEquipment,
   };
 };

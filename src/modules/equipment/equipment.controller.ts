@@ -31,6 +31,22 @@ export default async function equipmentController(server) {
       }
     }
   );
+  server.delete(
+    "/:id",
+    async (
+      request: FastifyRequest<{ Params: IEquipment }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const equipment = await serv.deleteEquipment(request.params._id);
+        return reply
+          .code(200)
+          .send({ message: "Equipment deleted", data: equipment });
+      } catch (error) {
+        reply.code(500).send(error);
+      }
+    }
+  );
 
   server.post("/", async (request: FastifyRequest, reply: FastifyReply) => {
     try {
