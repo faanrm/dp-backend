@@ -1,4 +1,4 @@
-import { IProductPlan } from "../productPlan/productPlan.interface";
+import { Maintenance } from "../maintenance/maintenance.entity";
 export interface IEquipment {
   _id: string;
   state: IState;
@@ -6,7 +6,7 @@ export interface IEquipment {
   uptime?: Date;
   created_at: Date;
   updated_at: Date;
-  productPlans: IProductPlan[];
+  maintenancePlans: Maintenance[];
 }
 
 export enum EType {

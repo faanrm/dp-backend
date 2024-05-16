@@ -6,6 +6,7 @@ import {
   Entity,
   ManyToMany,
 } from "typeorm";
+import { v4 as uuid } from "uuid";
 import { Product } from "../products/products.entity";
 import { Equipment } from "../equipment/equipment.entity";
 @Entity()
@@ -32,13 +33,13 @@ export class Material {
   @ManyToMany(() => Equipment, (eqp) => eqp.materials)
   equipments: Equipment[];
   public clone(): Material {
-    return Object.assign(Object.create(Material.prototype), {
-      _id: this._id,
-      name: this.name,
-      inventoryLevel: this.inventoryLevel,
-      description: this.description,
-      created_at: this.created_at,
-      updated_at: this.updated_at,
-    }) as Material;
+    const clonedMaterial = new Material();
+    clonedMaterial._id = uuid();
+    clonedMaterial.name = this.name;
+    clonedMaterial.inventoryLevel = this.inventoryLevel;
+    clonedMaterial.description = this.description;
+    clonedMaterial.created_at = this.created_at;
+    clonedMaterial.updated_at = this.updated_at;
+    return clonedMaterial;
   }
 }

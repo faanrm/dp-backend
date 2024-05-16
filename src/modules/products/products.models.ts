@@ -6,7 +6,10 @@ class ProductBuilder {
   constructor() {
     this.product = Object.create(Product.prototype);
   }
-
+  setName(name: string): ProductBuilder {
+    this.product.name = name;
+    return this;
+  }
   setQuantity(quantity: number): ProductBuilder {
     this.product.quantity = quantity;
     return this;

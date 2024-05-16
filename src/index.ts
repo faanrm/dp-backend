@@ -1,12 +1,12 @@
 /* eslint-disable linebreak-style */
-import createServer from './server';
+import createServer from "./server";
 
-const PORT = process.env.PORT || '3000';
+const PORT = process.env.PORT || "3000";
 const server = createServer();
 
-server.listen(+PORT, '0.0.0.0', (err, address) => {
-	if (err) throw err;
-	console.log(`server listening on ${address}`);
+server.listen(+PORT, "0.0.0.0", (err, address) => {
+  if (err) throw err;
+  console.log(`server listening on ${address}`);
 });
 
 module.exports = server;

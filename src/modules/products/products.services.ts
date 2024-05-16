@@ -6,6 +6,7 @@ export const productsService = (server) => {
     productData: DeepPartial<IProduct>
   ): Promise<IProduct> => {
     productBuilder
+      .setName(productData.name)
       .setQuantity(productData.quantity)
       .setDescription(productData.description)
       .setPrice(productData.price);

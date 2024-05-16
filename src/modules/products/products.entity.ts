@@ -11,6 +11,7 @@ import {
 import { orderProduct } from "../orderProduct/orderProduct.entity";
 import { Material } from "../material/material.entity";
 import { QualityControl } from "../qualityControl/qualityControl.entity";
+import { v4 as uuid } from "uuid";
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn("uuid")
@@ -57,11 +58,12 @@ export class Product {
   qualityControls: QualityControl[];
 
   public clone(): Product {
-    return Object.assign(Object.create(Product.prototype), {
-      _id: this._id,
-      quantity: this.quantity,
-      description: this.description,
-      price: this.price,
-    }) as Product;
+    const cloneProduct = new Product();
+    cloneProduct._id = uuid();
+    cloneProduct.name = this.name;
+    cloneProduct.price = this.price;
+    cloneProduct.description = this.description;
+    cloneProduct.quantity = this.quantity;
+    return cloneProduct;
   }
 }

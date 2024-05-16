@@ -6,9 +6,12 @@ export const materialServices = (server) => {
     materialData: DeepPartial<IMaterial>
   ): Promise<IMaterial> => {
     const createdMaterial = new Material().clone();
-    Object.assign(createdMaterial, materialData);
+    createdMaterial.name = materialData.name;
+    createdMaterial.inventoryLevel = materialData.inventoryLevel;
+    createdMaterial.description = materialData.description;
     return await server.db.materials.save(createdMaterial);
   };
+
   const getAllMaterial = async (): Promise<IMaterial[]> => {
     const materials = await server.db.materials.find();
     return materials;

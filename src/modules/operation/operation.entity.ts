@@ -11,6 +11,7 @@ import {
 import { ProductPlan } from "../productPlan/productPlan.entity";
 import { Equipment } from "../equipment/equipment.entity";
 import { Material } from "../material/material.entity";
+import { v4 as uuid } from "uuid";
 @Entity("operations")
 export class Operation {
   @PrimaryGeneratedColumn("uuid")
@@ -30,4 +31,10 @@ export class Operation {
   @ManyToOne(() => ProductPlan, (productPlan) => productPlan.operations)
   @JoinColumn({ name: "productPlanId" })
   productPlan: ProductPlan;
+  public clone(): Operation {
+    const clonedOperation = new Operation();
+    clonedOperation._id = uuid();
+    clonedOperation.duration = this.duration;
+    return clonedOperation;
+  }
 }

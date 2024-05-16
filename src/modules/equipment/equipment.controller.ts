@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { IEquipment } from "./equipment.interface";
 import { equipmentService } from "./equipment.service";
+import { Equipment } from "./equipment.entity";
 export default async function equipmentController(server) {
   const serv = equipmentService(server);
 
@@ -24,7 +25,8 @@ export default async function equipmentController(server) {
       reply: FastifyReply
     ) => {
       try {
-        const equipment = await serv.getOneEquipment(request.params._id);
+        const id = request.params._id;
+        const equipment = await serv.getOneEquipment(id);
         reply.code(200).send(equipment);
       } catch (error) {
         reply.code(500).send(error);
@@ -38,7 +40,8 @@ export default async function equipmentController(server) {
       reply: FastifyReply
     ) => {
       try {
-        const equipment = await serv.deleteEquipment(request.params._id);
+        const id = request.params._id;
+        const equipment = await serv.deleteEquipment(id);
         return reply
           .code(200)
           .send({ message: "Equipment deleted", data: equipment });
@@ -64,14 +67,29 @@ export default async function equipmentController(server) {
       reply: FastifyReply
     ) => {
       try {
-        const updatedEquipment = await serv.updateEquipment(
-          request.params._id,
-          request.body
-        );
+        const id = request.params._id;
+        const updatedEquipment = await serv.updateEquipment(id, request.body);
         reply.code(200).send(updatedEquipment);
       } catch (error) {
         console.error(error);
         reply.code(500).send({ error: error.message });
+      }
+    }
+  );
+  server.get(
+    "/history/:id",
+    async (
+      request: FastifyRequest<{ Params: IEquipment }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const id = request.params._id;
+        const history = await serv.getMaintenanceHistory(id);
+        reply.code(200).send(history);
+      } catch (error) {
+        reply
+          .code(500)
+          .send({ message: "Error when getting history maintenance" });
       }
     }
   );

@@ -1,6 +1,7 @@
 import { DeepPartial } from "typeorm";
 import { Equipment } from "./equipment.entity";
 import { IEquipment, EType, IState } from "./equipment.interface";
+
 export const equipmentService = (server) => {
   const createEquipment = async (
     equipmentData: DeepPartial<IEquipment>
@@ -69,6 +70,20 @@ export const equipmentService = (server) => {
     equipment.lifePoint = equipment.lifePoint - 1;
     return await server.db.equipments.save(equipment);
   };
+
+  const getMaintenanceHistory = async (id: string): Promise<IEquipment> => {
+    const equipment = await server.db.equipments.findOne({
+      where: { _id: id },
+      relations: ["maintenancePlans"],
+    });
+
+    if (!equipment) {
+      throw new Error("Equipment not found");
+    }
+
+    return equipment;
+  };
+
   return {
     changeEquipmentState,
     createEquipment,
@@ -77,5 +92,6 @@ export const equipmentService = (server) => {
     updateEquipment,
     deleteEquipment,
     decrementLifePoint,
+    getMaintenanceHistory,
   };
 };
