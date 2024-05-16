@@ -18,7 +18,45 @@ export const maintenanceServices = (server) => {
     }
     return await server.db.maintenances.save(createdMaintenance);
   };
+
+  const updateMaintenance = async (
+    id: string,
+    data: DeepPartial<IMaintenance>
+  ): Promise<IMaintenance> => {
+    const maintenance = await server.db.maintenances.findOne({ _id: id });
+    if (!maintenance) {
+      throw new Error("Maintenance not found");
+    }
+
+    Object.assign(maintenance, data);
+
+    if (data.equipmentId) {
+      const newEquipment = await server.db.equipments.findOne({
+        _id: data.equipmentId,
+      });
+      if (newEquipment) {
+        maintenance.equipment = newEquipment;
+      } else {
+        throw new Error("New equipment not found");
+      }
+    }
+    return await server.db.maintenances.save(maintenance);
+  };
+  const deleteMaintenance = async (id: string): Promise<void> => {
+    const maintenance = await server.db.maintenances.delete(id);
+    if (!maintenance) {
+      throw new Error("Maintenance not found");
+    }
+    return maintenance;
+  };
+  const getAllMaintenance = async (): Promise<IMaintenance[]> => {
+    const maintenance = await server.db.maintenances.find();
+    return maintenance;
+  };
   return {
     createMaintenance,
+    updateMaintenance,
+    deleteMaintenance,
+    getAllMaintenance,
   };
 };
