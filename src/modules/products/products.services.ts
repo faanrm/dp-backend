@@ -1,7 +1,6 @@
 import { IProduct, IProductWithMaterials } from "./products.interface";
 import { DeepPartial } from "typeorm";
 import productBuilder from "./products.models";
-import { Material } from "../material/material.entity";
 export const productsService = (server) => {
   const createProduct = async (
     productData: DeepPartial<IProduct>

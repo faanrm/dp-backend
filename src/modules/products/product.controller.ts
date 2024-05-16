@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { productsService } from "./products.services";
 import { IProduct } from "./products.interface";
-import { Product } from "./products.entity";
 export default async function productHandler(server) {
   const serv = productsService(server);
   server.get("/", async (request: FastifyRequest, reply: FastifyReply) => {

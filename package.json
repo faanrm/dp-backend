@@ -19,7 +19,6 @@
     "fastify-cors": "^5.2.0",
     "fastify-oas": "^3.0.8",
     "fastify-plugin": "3.0.0",
-    "mongodb": "^3.6.6",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.32"
