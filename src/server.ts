@@ -4,6 +4,8 @@ import db from "./config/db";
 import equipmentHandler from "./modules/equipment/equipment.controller";
 import productHandler from "./modules/products/routes";
 import materialHandler from "./modules/material/material.controller";
+import componentsHandler from "./modules/components/components.controller";
+import operationHandler from "./modules/operation/operation.controller";
 function createServer() {
   const server = fastify();
   server.register(require("fastify-cors"));
@@ -34,6 +36,9 @@ function createServer() {
   server.register(productHandler, { prefix: "/product" });
   server.register(equipmentHandler, { prefix: "/equipment" });
   server.register(materialHandler, { prefix: "/material" });
+  server.register(componentsHandler, { prefix: "/components" });
+  server.register(operationHandler, { prefix: "/operations" });
+
   server.setErrorHandler((error, req, res) => {
     req.log.error(error.toString());
     res.send({ error });

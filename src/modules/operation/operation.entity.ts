@@ -37,4 +37,10 @@ export class Operation {
     clonedOperation.duration = this.duration;
     return clonedOperation;
   }
+  public setEquipment(equipment: Equipment): void {
+    this.equipment = equipment;
+  }
+  public setMaterial(material: Material): void {
+    this.material = material;
+  }
 }
