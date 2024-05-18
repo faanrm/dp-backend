@@ -69,9 +69,14 @@ export const componentsServices = (server) => {
     }
     return components;
   };
+  const getAllComponents = async (): Promise<Component[]> => {
+    const components = await server.db.components.find();
+    return components;
+  };
   return {
     deleteComponents,
     createComponents,
     updateComponents,
+    getAllComponents,
   };
 };
