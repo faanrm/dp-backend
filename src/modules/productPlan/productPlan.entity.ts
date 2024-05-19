@@ -17,7 +17,8 @@ export class ProductPlan {
   startTime: Date;
   @Column()
   endTime: Date;
-
+  @Column()
+  duration: Date;
   @Column({ type: "enum", enum: Status, default: Status.in_progress })
   status: Status;
   @OneToMany(() => Operation, (operation) => operation.productPlan)

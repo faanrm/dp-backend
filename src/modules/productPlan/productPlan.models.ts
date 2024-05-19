@@ -39,5 +39,5 @@ class ProductPlanBuilder {
   }
 }
 
-const productPlan = new ProductPlanBuilder();
-export default productPlan;
+const productPlanBuilder = new ProductPlanBuilder();
+export default productPlanBuilder;
