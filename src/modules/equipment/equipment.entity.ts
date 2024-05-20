@@ -20,8 +20,8 @@ export class Equipment {
   state: IState;
   @Column({ type: "enum", enum: EType, default: EType.machineForProduction })
   type: EType;
-  @Column()
-  uptime: Date;
+  @Column({ nullable: true })
+  uptime?: Date;
   @Column({ default: 6 })
   lifePoint: number;
   @CreateDateColumn()
