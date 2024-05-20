@@ -13,8 +13,7 @@ export const materialServices = (server) => {
   };
 
   const getAllMaterial = async (): Promise<IMaterial[]> => {
-    const materials = await server.db.materials.find();
-    return materials;
+    return await server.db.materials.find();
   };
   const updateMaterial = async (
     id: string,

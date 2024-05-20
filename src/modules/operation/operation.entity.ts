@@ -23,11 +23,12 @@ export class Operation {
   @UpdateDateColumn()
   updated_at: Date;
   @ManyToOne(() => Equipment)
-  @JoinColumn({ name: "equipmentId" })
+  @JoinColumn({ name: "equipmentIde" })
   equipment: Equipment;
   @ManyToOne(() => Material)
   @JoinColumn({ name: "materialId" })
   material: Material;
+
   @ManyToOne(() => ProductPlan, (productPlan) => productPlan.operations)
   @JoinColumn({ name: "productPlanId" })
   productPlan: ProductPlan;

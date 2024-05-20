@@ -28,13 +28,12 @@ export class Equipment {
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
-  @ManyToMany(() => Material, (mat) => mat.equipments, {
-    cascade: true,
-  })
+
+  @ManyToMany(() => Material, (mat) => mat.equipment)
   @JoinTable({
     name: "operations",
     joinColumn: {
-      name: "equipmentId",
+      name: "equipmentIde",
       referencedColumnName: "_id",
     },
     inverseJoinColumn: {
@@ -43,6 +42,7 @@ export class Equipment {
     },
   })
   materials: Material[];
+
   @OneToMany(() => Maintenance, (maintenance) => maintenance.equipment, {
     cascade: true,
   })

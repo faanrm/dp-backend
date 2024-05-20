@@ -31,7 +31,7 @@ export class Material {
   @ManyToMany(() => Product, (product) => product.materials)
   products: Product[];
   @ManyToMany(() => Equipment, (eqp) => eqp.materials)
-  equipments: Equipment[];
+  equipment: Equipment[];
   public clone(): Material {
     const clonedMaterial = new Material();
     clonedMaterial._id = uuid();

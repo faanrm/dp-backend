@@ -8,7 +8,9 @@ export default async function materialHandler(server) {
       const materials = await serv.getAllMaterial();
       return reply.code(200).send(materials);
     } catch (error) {
-      return reply.code(500).send({ message: "Internal Servor error" });
+      return reply
+        .code(500)
+        .send({ message: "Internal Servor error ", error: error.message });
     }
   });
   server.put(

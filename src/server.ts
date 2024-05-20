@@ -13,6 +13,7 @@ function createServer() {
   server.register(require("fastify-oas"), {
     routePrefix: "/api",
     exposeRoute: true,
+    logging: true,
     swagger: {
       info: {
         title: "design pattern backend api",
@@ -20,7 +21,7 @@ function createServer() {
         version: "0.1.0",
       },
       servers: [
-        { url: "http://localhost:3000", description: "development" },
+        { url: "http://localhost:5200", description: "development" },
         {
           url: "https://<production-url>",
           description: "production",

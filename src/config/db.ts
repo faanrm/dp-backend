@@ -17,7 +17,7 @@ export default fp(async (server) => {
     Object.assign(connectionOptions, {
       options: { encrypt: true },
       synchronize: true,
-      dropSchema: true,
+      dropTable: true,
       entities: [
         Product,
         Equipment,
@@ -37,6 +37,9 @@ export default fp(async (server) => {
     server.decorate("db", {
       products: connection.getRepository(Product),
       equipments: connection.getRepository(Equipment),
+      materials: connection.getRepository(Material),
+      operations: connection.getRepository(Operation),
+      components: connection.getRepository(Component),
       orderProducts: connection.getRepository(orderProduct),
       productPlans: connection.getRepository(ProductPlan),
     });
