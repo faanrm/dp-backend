@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Status } from "./productPlan.interface";
-import { Operation } from "../operation/operation.entity";
+import { Operation } from "../operation/operations.entity";
 @Entity()
 export class ProductPlan {
   @PrimaryGeneratedColumn("uuid")

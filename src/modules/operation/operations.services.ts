@@ -1,27 +1,27 @@
 import { DeepPartial } from "typeorm";
-import { Operation } from "./operation.entity";
+import { Operation } from "./operations.entity";
 export default function operationServices(server) {
   const createOperation = async (
     operationData: DeepPartial<Operation>
   ): Promise<any> => {
     const createdOperation = new Operation().clone();
     createdOperation.duration = operationData.duration as Date;
-    if (operationData.equipment) {
+    if (operationData.equipmentO) {
       const equipment = await server.db.equipments.findOne(
-        operationData.equipment._id
+        operationData.equipmentO._id
       );
       if (equipment) {
-        createdOperation.equipment = equipment;
+        createdOperation.equipmentO = equipment;
       } else {
         throw new Error("Equipment not found");
       }
     }
-    if (operationData.material) {
+    if (operationData.materialO) {
       const material = await server.db.materials.findOne(
-        operationData.material._id
+        operationData.materialO._id
       );
       if (material) {
-        createdOperation.material = material;
+        createdOperation.materialO = material;
       } else {
         throw new Error("Material not found");
       }
@@ -37,18 +37,18 @@ export default function operationServices(server) {
       throw new Error("Operation not found");
     }
     Object.assign(operation, operationData);
-    if (operationData.equipment) {
+    if (operationData.equipmentO) {
       const equipment = await server.db.equipments.findOne(
-        operationData.equipment._id
+        operationData.equipmentO._id
       );
       if (!equipment) {
         throw new Error("Equipment not found");
       }
       operation.setEquipment(equipment);
     }
-    if (operationData.material) {
+    if (operationData.materialO) {
       const material = await server.db.Material.findOne(
-        operationData.material._id
+        operationData.materialO._id
       );
       if (!material) {
         throw new Error("Material not found");

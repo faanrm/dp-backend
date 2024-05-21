@@ -12,7 +12,7 @@ import { ProductPlan } from "../productPlan/productPlan.entity";
 import { Equipment } from "../equipment/equipment.entity";
 import { Material } from "../material/material.entity";
 import { v4 as uuid } from "uuid";
-@Entity("operations")
+@Entity()
 export class Operation {
   @PrimaryGeneratedColumn("uuid")
   _id: string;
@@ -22,15 +22,11 @@ export class Operation {
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
-  @ManyToOne(() => Equipment)
-  @JoinColumn({ name: "equipmentIde" })
-  equipment: Equipment;
-  @ManyToOne(() => Material)
-  @JoinColumn({ name: "materialId" })
-  material: Material;
-
+  @ManyToOne(() => Equipment, (eqp) => eqp.operations)
+  equipmentO: Equipment;
+  @ManyToOne(() => Material, (material) => material.operations)
+  materialO: Material;
   @ManyToOne(() => ProductPlan, (productPlan) => productPlan.operations)
-  @JoinColumn({ name: "productPlanId" })
   productPlan: ProductPlan;
   public clone(): Operation {
     const clonedOperation = new Operation();
@@ -39,9 +35,9 @@ export class Operation {
     return clonedOperation;
   }
   public setEquipment(equipment: Equipment): void {
-    this.equipment = equipment;
+    this.equipmentO = equipment;
   }
   public setMaterial(material: Material): void {
-    this.material = material;
+    this.materialO = material;
   }
 }

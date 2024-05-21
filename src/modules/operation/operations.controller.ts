@@ -1,5 +1,5 @@
-import operationServices from "./operation.services";
-import { Operation } from "./operation.entity";
+import operationServices from "./operations.services";
+import { Operation } from "./operations.entity";
 import { FastifyRequest, FastifyReply } from "fastify";
 export default async function operationHandler(server) {
   const serv = operationServices(server);

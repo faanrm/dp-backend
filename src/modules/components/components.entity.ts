@@ -24,12 +24,10 @@ export class Component {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Product)
-  @JoinColumn({ name: "productId" })
-  product: Product;
-  @ManyToOne(() => Material)
-  @JoinColumn({ name: "materialId" })
-  material: Material;
+  @ManyToOne(() => Product, (product) => product.components)
+  productC: Product;
+  @ManyToOne(() => Product, (product) => product.components)
+  materialC: Material;
 
   public clone(): Component {
     const clonedComponent = new Component();
@@ -39,10 +37,10 @@ export class Component {
   }
 
   public setProduct(product: Product): void {
-    this.product = product;
+    this.productC = product;
   }
 
   public setMaterial(material: Material): void {
-    this.material = material;
+    this.materialC = material;
   }
 }

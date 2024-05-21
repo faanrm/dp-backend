@@ -7,22 +7,22 @@ export const componentsServices = (server) => {
     const createdComponents = new Component().clone();
     createdComponents.quantity = componentsData.quantity;
 
-    if (componentsData.material) {
+    if (componentsData.materialC) {
       const material = await server.db.materials.findOne(
-        componentsData.material._id
+        componentsData.materialC._id
       );
       if (material) {
-        createdComponents.material = material;
+        createdComponents.materialC = material;
       } else {
         throw new Error("Material not found");
       }
     }
-    if (componentsData.product) {
+    if (componentsData.productC) {
       const product = await server.db.products.findOne(
-        componentsData.product._id
+        componentsData.productC._id
       );
       if (product) {
-        componentsData.product = product;
+        componentsData.productC = product;
       } else {
         throw new Error("Product not found");
       }
@@ -38,9 +38,9 @@ export const componentsServices = (server) => {
       throw new Error("Components not found");
     }
     Object.assign(components, componentsData);
-    if (componentsData.product) {
+    if (componentsData.productC) {
       const product = await server.db.products.findOne(
-        componentsData.product._id
+        componentsData.productC._id
       );
       if (product) {
         components.setProduct(product);
@@ -49,9 +49,9 @@ export const componentsServices = (server) => {
       }
     }
 
-    if (componentsData.material) {
+    if (componentsData.materialC) {
       const material = await server.db.materials.findOne(
-        componentsData.material._id
+        componentsData.materialC._id
       );
       if (material) {
         components.setMaterial(material);
@@ -70,8 +70,7 @@ export const componentsServices = (server) => {
     return components;
   };
   const getAllComponents = async (): Promise<Component[]> => {
-    const components = await server.db.components.find();
-    return components;
+    return await server.db.components.find();
   };
   return {
     deleteComponents,

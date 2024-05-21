@@ -4,14 +4,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
-  ManyToMany,
   DeepPartial,
-  JoinTable,
   OneToMany,
 } from "typeorm";
 import { EType, IState } from "./equipment.interface";
 import { Maintenance } from "../maintenance/maintenance.entity";
-import { Material } from "../material/material.entity";
+import { Operation } from "../operation/operations.entity";
+import { v4 as uuid } from "uuid";
 @Entity()
 export class Equipment {
   @PrimaryGeneratedColumn("uuid")
@@ -21,6 +20,8 @@ export class Equipment {
   @Column({ type: "enum", enum: EType, default: EType.machineForProduction })
   type: EType;
   @Column({ nullable: true })
+  name?: string;
+  @Column({ nullable: true })
   uptime?: Date;
   @Column({ default: 6 })
   lifePoint: number;
@@ -29,19 +30,10 @@ export class Equipment {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToMany(() => Material, (mat) => mat.equipment)
-  @JoinTable({
-    name: "operations",
-    joinColumn: {
-      name: "equipmentIde",
-      referencedColumnName: "_id",
-    },
-    inverseJoinColumn: {
-      name: "materialId",
-      referencedColumnName: "_id",
-    },
+  @OneToMany(() => Operation, (eqp) => eqp.equipmentO, {
+    cascade: true,
   })
-  materials: Material[];
+  operations: Operation[];
 
   @OneToMany(() => Maintenance, (maintenance) => maintenance.equipment, {
     cascade: true,
@@ -52,7 +44,6 @@ export class Equipment {
       state: this.state,
       type: this.type,
       uptime: this.uptime,
-      materials: this.materials.map((material) => material.clone()),
     };
     const clone = Object.assign(new Equipment(), clonedEquipment);
     return clone;

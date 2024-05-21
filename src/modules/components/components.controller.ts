@@ -52,7 +52,7 @@ export default async function componentsHandler(server) {
   );
   server.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const components = await serv.getAllComponents;
+      const components = await serv.getAllComponents();
       return reply.code(200).send(components);
     } catch (error) {
       return reply.code(500).send({ error: error.message });

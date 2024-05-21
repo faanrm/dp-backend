@@ -2,10 +2,10 @@
 import fastify from "fastify";
 import db from "./config/db";
 import equipmentHandler from "./modules/equipment/equipment.controller";
-import productHandler from "./modules/products/routes";
 import materialHandler from "./modules/material/material.controller";
 import componentsHandler from "./modules/components/components.controller";
-import operationHandler from "./modules/operation/operation.controller";
+import operationHandler from "./modules/operation/operations.controller";
+import productHandler from "./modules/products/product.controller";
 function createServer() {
   const server = fastify();
   server.register(require("fastify-cors"));
@@ -14,6 +14,7 @@ function createServer() {
     routePrefix: "/api",
     exposeRoute: true,
     logging: true,
+    pluginTimeout: 20000,
     swagger: {
       info: {
         title: "design pattern backend api",

@@ -8,7 +8,7 @@ import { orderProduct } from "../modules/orderProduct/orderProduct.entity";
 import { ProductPlan } from "../modules/productPlan/productPlan.entity";
 import { Material } from "../modules/material/material.entity";
 import { Component } from "../modules/components/components.entity";
-import { Operation } from "../modules/operation/operation.entity";
+import { Operation } from "../modules/operation/operations.entity";
 import { Maintenance } from "../modules/maintenance/maintenance.entity";
 import { QualityControl } from "../modules/qualityControl/qualityControl.entity";
 export default fp(async (server) => {
@@ -17,15 +17,14 @@ export default fp(async (server) => {
     Object.assign(connectionOptions, {
       options: { encrypt: true },
       synchronize: true,
-      dropTable: true,
       entities: [
         Product,
         Equipment,
-        orderProduct,
-        ProductPlan,
         Material,
-        Component,
+        orderProduct,
         Operation,
+        Component,
+        ProductPlan,
         Maintenance,
         QualityControl,
       ],
@@ -42,6 +41,8 @@ export default fp(async (server) => {
       components: connection.getRepository(Component),
       orderProducts: connection.getRepository(orderProduct),
       productPlans: connection.getRepository(ProductPlan),
+      qualityControl: connection.getRepository(QualityControl),
+      maintenance: connection.getRepository(Maintenance),
     });
   } catch (error) {
     console.log(error);

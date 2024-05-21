@@ -9,7 +9,7 @@ import {
   JoinTable,
 } from "typeorm";
 import { orderProduct } from "../orderProduct/orderProduct.entity";
-import { Material } from "../material/material.entity";
+import { Component } from "../components/components.entity";
 import { QualityControl } from "../qualityControl/qualityControl.entity";
 import { v4 as uuid } from "uuid";
 @Entity()
@@ -39,21 +39,10 @@ export class Product {
   })
   productOrders: orderProduct[];
 
-  @ManyToMany(() => Material, (material) => material.products, {
+  @OneToMany(() => Component, (component) => component.productC, {
     cascade: true,
   })
-  @JoinTable({
-    name: "components",
-    joinColumn: {
-      name: "productId",
-      referencedColumnName: "_id",
-    },
-    inverseJoinColumn: {
-      name: "materialId",
-      referencedColumnName: "_id",
-    },
-  })
-  materials: Material[];
+  components: Component[];
   @OneToMany(() => QualityControl, (qualityControl) => qualityControl.product)
   qualityControls: QualityControl[];
 

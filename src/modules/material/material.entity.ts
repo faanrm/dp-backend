@@ -5,10 +5,12 @@ import {
   UpdateDateColumn,
   Entity,
   ManyToMany,
+  OneToMany,
 } from "typeorm";
 import { v4 as uuid } from "uuid";
-import { Product } from "../products/products.entity";
+import { Component } from "../components/components.entity";
 import { Equipment } from "../equipment/equipment.entity";
+import { Operation } from "../operation/operations.entity";
 @Entity()
 export class Material {
   @PrimaryGeneratedColumn("uuid")
@@ -28,10 +30,10 @@ export class Material {
 
   @UpdateDateColumn()
   updated_at: Date;
-  @ManyToMany(() => Product, (product) => product.materials)
-  products: Product[];
-  @ManyToMany(() => Equipment, (eqp) => eqp.materials)
-  equipment: Equipment[];
+  @OneToMany(() => Component, (component) => component.materialC)
+  components: Component[];
+  @OneToMany(() => Operation, (operation) => operation.materialO)
+  operations: Operation;
   public clone(): Material {
     const clonedMaterial = new Material();
     clonedMaterial._id = uuid();
