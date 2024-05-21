@@ -5,8 +5,8 @@ import {
   UpdateDateColumn,
   Entity,
   ManyToOne,
-  JoinColumn,
-  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { ProductPlan } from "../productPlan/productPlan.entity";
 import { Equipment } from "../equipment/equipment.entity";
@@ -22,8 +22,21 @@ export class Operation {
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
-  @ManyToOne(() => Equipment, (eqp) => eqp.operations)
-  equipmentO: Equipment;
+  @ManyToMany(() => Equipment, (equipment) => equipment.operations, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: "operation-equipment",
+    joinColumn: {
+      name: "operationId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "equipmentId",
+      referencedColumnName: "id",
+    },
+  })
+  equipmentO: Equipment[];
   @ManyToOne(() => Material, (material) => material.operations)
   materialO: Material;
   @ManyToOne(() => ProductPlan, (productPlan) => productPlan.operations)
@@ -34,7 +47,7 @@ export class Operation {
     clonedOperation.duration = this.duration;
     return clonedOperation;
   }
-  public setEquipment(equipment: Equipment): void {
+  public setEquipment(equipment: Equipment[]): void {
     this.equipmentO = equipment;
   }
   public setMaterial(material: Material): void {

@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
   DeepPartial,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { EType, IState } from "./equipment.interface";
 import { Maintenance } from "../maintenance/maintenance.entity";
@@ -30,8 +32,17 @@ export class Equipment {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => Operation, (eqp) => eqp.equipmentO, {
-    cascade: true,
+  @ManyToMany(() => Operation, (operation) => operation.equipmentO)
+  @JoinTable({
+    name: "operation-equipment",
+    joinColumn: {
+      name: "equipmentId",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "operationId",
+      referencedColumnName: "_id",
+    },
   })
   operations: Operation[];
 

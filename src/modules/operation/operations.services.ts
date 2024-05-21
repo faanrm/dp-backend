@@ -6,16 +6,6 @@ export default function operationServices(server) {
   ): Promise<any> => {
     const createdOperation = new Operation().clone();
     createdOperation.duration = operationData.duration as Date;
-    if (operationData.equipmentO) {
-      const equipment = await server.db.equipments.findOne(
-        operationData.equipmentO._id
-      );
-      if (equipment) {
-        createdOperation.equipmentO = equipment;
-      } else {
-        throw new Error("Equipment not found");
-      }
-    }
     if (operationData.materialO) {
       const material = await server.db.materials.findOne(
         operationData.materialO._id
@@ -67,10 +57,26 @@ export default function operationServices(server) {
     }
     return operation;
   };
+  const assignEquipmentToOperation = async (
+    operationId: string,
+    equipmentId: string
+  ): Promise<void> => {
+    const operation = await server.db.operations.findOne({ _id: operationId });
+    if (!operation) {
+      throw new Error("Operation not found");
+    }
+    const equipment = await server.db.equipments.findOne({ _id: equipmentId });
+    if (!equipment) {
+      throw new Error("Equipment not found");
+    }
+    operation.setEquipment(equipment);
+    await server.db.operations.save(operation);
+  };
   return {
     deleteOperation,
     getAllOperation,
     updateOperation,
     createOperation,
+    assignEquipmentToOperation,
   };
 }
