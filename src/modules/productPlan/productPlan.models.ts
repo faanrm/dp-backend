@@ -1,17 +1,11 @@
 import { Status, IProductPlan } from "./productPlan.interface";
 
 class ProductPlanBuilder {
-  private estimate_duration: Date;
   private startTime: Date;
   private endTime: Date;
   private status: Status;
 
   constructor() {}
-
-  setEstimate_Duration(estimate_duration: Date): ProductPlanBuilder {
-    this.estimate_duration = estimate_duration;
-    return this;
-  }
 
   setStart_Time(startTime: Date): ProductPlanBuilder {
     this.startTime = startTime;
@@ -29,7 +23,6 @@ class ProductPlanBuilder {
 
   build(): IProductPlan {
     return {
-      estimate_duration: this.estimate_duration,
       startTime: this.startTime,
       endTime: this.endTime,
       status: this.status,

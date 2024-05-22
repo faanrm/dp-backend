@@ -1,5 +1,4 @@
 export interface IProductPlan {
-  estimate_duration: Date;
   startTime: Date;
   endTime: Date;
   status: Status;

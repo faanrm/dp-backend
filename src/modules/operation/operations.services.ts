@@ -6,6 +6,7 @@ export default function operationServices(server) {
   ): Promise<any> => {
     const createdOperation = new Operation().clone();
     createdOperation.duration = operationData.duration as Date;
+    createdOperation.state = operationData.state;
     if (operationData.materialO) {
       const materialIds = operationData.equipmentO.map((mat) => mat._id);
       const material = await server.db.materials.find({

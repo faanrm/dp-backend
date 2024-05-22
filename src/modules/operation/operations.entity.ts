@@ -12,12 +12,19 @@ import { ProductPlan } from "../productPlan/productPlan.entity";
 import { Equipment } from "../equipment/equipment.entity";
 import { Material } from "../material/material.entity";
 import { v4 as uuid } from "uuid";
+import { OperationState } from "./operation.interface";
 @Entity()
 export class Operation {
   @PrimaryGeneratedColumn("uuid")
   _id: string;
   @Column()
   duration: Date;
+  @Column({
+    type: "enum",
+    enum: OperationState,
+    default: OperationState.in_progress,
+  })
+  state: string;
   @CreateDateColumn()
   created_at: Date;
   @UpdateDateColumn()
@@ -58,6 +65,7 @@ export class Operation {
     const clonedOperation = new Operation();
     clonedOperation._id = uuid();
     clonedOperation.duration = this.duration;
+    clonedOperation.state = this.state;
     return clonedOperation;
   }
   public setEquipment(equipment: Equipment[]): void {

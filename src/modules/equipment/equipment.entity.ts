@@ -12,7 +12,6 @@ import {
 import { EType, IState } from "./equipment.interface";
 import { Maintenance } from "../maintenance/maintenance.entity";
 import { Operation } from "../operation/operations.entity";
-import { v4 as uuid } from "uuid";
 @Entity()
 export class Equipment {
   @PrimaryGeneratedColumn("uuid")

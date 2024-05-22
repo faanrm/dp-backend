@@ -9,7 +9,6 @@ export default function productPlanServices(server) {
     productPlanBuilder
       .setEnd_Time(productPlanData.startTime as Date)
       .setEnd_Time(productPlanData.endTime as Date)
-      .setEstimate_Duration(productPlanData.duration as Date)
       .setStatus(productPlanData.status as Status);
 
     const buildProductPlan = productPlanBuilder.build();
@@ -18,8 +17,35 @@ export default function productPlanServices(server) {
     );
     return createdProductPlan;
   };
-
+  const getAllProductPlan = async (): Promise<ProductPlan[]> => {
+    const productPlan = await server.db.productPlans.find();
+    return productPlan;
+  };
+  const updateProductPlan = async (
+    productPlanData: DeepPartial<ProductPlan>,
+    id: string
+  ): Promise<ProductPlan> => {
+    const productPlan = await server.db.productPlans.find({
+      where: { _id: id },
+    });
+    if (!productPlan) {
+      throw new Error("No product plan found");
+    }
+    Object.assign(productPlan, productPlanData);
+    await server.db.productPlans.save(productPlan);
+    return productPlan;
+  };
+  const deleteProductPlan = async (id: string): Promise<void> => {
+    const productPlan = await server.db.productPlans.delete(id);
+    if (!productPlan) {
+      throw new Error("Product not found");
+    }
+    return productPlan;
+  };
   return {
+    deleteProductPlan,
+    updateProductPlan,
+    getAllProductPlan,
     createProductPlan,
   };
 }

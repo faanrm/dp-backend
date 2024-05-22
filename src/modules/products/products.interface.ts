@@ -1,6 +1,6 @@
 import { Material } from "../material/material.entity";
 export interface IProduct {
-  _id?: number;
+  _id?: string;
   quantity: number;
   name: string;
   description: string;

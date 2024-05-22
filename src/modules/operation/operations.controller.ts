@@ -60,4 +60,48 @@ export default async function operationHandler(server) {
       }
     }
   );
+  server.put(
+    "/:operationId/:equipmentId",
+    async (
+      req: FastifyRequest<{
+        Params: { operationId: string; equipmentId: string };
+      }>,
+      reply: FastifyReply
+    ) => {
+      const { operationId, equipmentId } = req.params;
+      try {
+        const equipmentToOperation = await serv.assignEquipmentToOperation(
+          operationId,
+          equipmentId
+        );
+        return reply.code(200).send({
+          message: "equipment assigned to operation",
+          data: equipmentToOperation,
+        });
+      } catch (error) {
+        return reply.code(500).send({ error: error.message });
+      }
+    }
+  );
+  server.put(
+    "/equipment-operation/:operationId/:productPlanId",
+    async (
+      req: FastifyRequest<{
+        Params: { operationId: string; productPlanId: string };
+      }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const { operationId, productPlanId } = req.params;
+        try {
+          const productPlanToOperation =
+            await serv.assignOperationToProductPlan(operationId, productPlanId);
+          return reply.code(200).send({
+            message: "operation assigned to product plan",
+            data: productPlanToOperation,
+          });
+        } catch (error) {}
+      } catch (error) {}
+    }
+  );
 }
