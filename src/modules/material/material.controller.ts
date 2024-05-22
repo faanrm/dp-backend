@@ -14,7 +14,7 @@ export default async function materialHandler(server) {
     }
   });
   server.put(
-    "/:id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Params: IMaterial; Body: IMaterial }>,
       reply: FastifyReply
@@ -33,7 +33,7 @@ export default async function materialHandler(server) {
     }
   );
   server.delete(
-    "/:id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Params: IMaterial }>,
       reply: FastifyReply

@@ -39,8 +39,17 @@ export class Product {
   })
   productOrders: orderProduct[];
 
-  @OneToMany(() => Component, (component) => component.productC, {
-    cascade: true,
+  @ManyToMany(() => Component, (component) => component.productC)
+  @JoinTable({
+    name: "components-product",
+    joinColumn: {
+      name: "productId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "componentId",
+      referencedColumnName: "_id",
+    },
   })
   components: Component[];
   @OneToMany(() => QualityControl, (qualityControl) => qualityControl.product)

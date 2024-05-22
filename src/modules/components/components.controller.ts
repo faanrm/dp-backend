@@ -18,7 +18,7 @@ export default async function componentsHandler(server) {
     }
   );
   server.put(
-    "/id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Body: Component; Params: { id: string } }>,
       reply: FastifyReply
@@ -35,7 +35,7 @@ export default async function componentsHandler(server) {
     }
   );
   server.delete(
-    "/id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Params: { id: string } }>,
       reply: FastifyReply

@@ -19,7 +19,7 @@ export default async function equipmentController(server) {
   });
 
   server.get(
-    "/:id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Params: IEquipment }>,
       reply: FastifyReply
@@ -34,7 +34,7 @@ export default async function equipmentController(server) {
     }
   );
   server.delete(
-    "/:id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Params: IEquipment }>,
       reply: FastifyReply
@@ -46,7 +46,7 @@ export default async function equipmentController(server) {
           .code(200)
           .send({ message: "Equipment deleted", data: equipment });
       } catch (error) {
-        reply.code(500).send(error);
+        reply.code(500).send(error.message);
       }
     }
   );
@@ -56,12 +56,12 @@ export default async function equipmentController(server) {
       const newEquipment = await serv.createEquipment(request.body);
       reply.code(201).send(newEquipment);
     } catch (error) {
-      reply.code(500).send(error);
+      reply.code(500).send({ message: error.message });
     }
   });
 
   server.put(
-    "/:id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Params: IEquipment }>,
       reply: FastifyReply
@@ -77,7 +77,7 @@ export default async function equipmentController(server) {
     }
   );
   server.get(
-    "/history/:id",
+    "/history/:_id",
     async (
       request: FastifyRequest<{ Params: IEquipment }>,
       reply: FastifyReply

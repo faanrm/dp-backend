@@ -5,11 +5,10 @@ import {
   UpdateDateColumn,
   Entity,
   ManyToMany,
-  OneToMany,
+  JoinTable,
 } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { Component } from "../components/components.entity";
-import { Equipment } from "../equipment/equipment.entity";
 import { Operation } from "../operation/operations.entity";
 @Entity()
 export class Material {
@@ -30,10 +29,32 @@ export class Material {
 
   @UpdateDateColumn()
   updated_at: Date;
-  @OneToMany(() => Component, (component) => component.materialC)
+  @ManyToMany(() => Component, (component) => component.materialC)
+  @JoinTable({
+    name: "components-material",
+    joinColumn: {
+      name: "materialId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "componentId",
+      referencedColumnName: "_id",
+    },
+  })
   components: Component[];
-  @OneToMany(() => Operation, (operation) => operation.materialO)
-  operations: Operation;
+  @ManyToMany(() => Operation, (operation) => operation.equipmentO)
+  @JoinTable({
+    name: "operation-material",
+    joinColumn: {
+      name: "materialId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "operationId",
+      referencedColumnName: "_id",
+    },
+  })
+  operations: Operation[];
   public clone(): Material {
     const clonedMaterial = new Material();
     clonedMaterial._id = uuid();

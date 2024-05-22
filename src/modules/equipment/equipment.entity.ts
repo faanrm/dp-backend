@@ -37,7 +37,7 @@ export class Equipment {
     name: "operation-equipment",
     joinColumn: {
       name: "equipmentId",
-      referencedColumnName: "id",
+      referencedColumnName: "_id",
     },
     inverseJoinColumn: {
       name: "operationId",

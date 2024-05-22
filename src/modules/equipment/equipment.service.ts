@@ -28,8 +28,9 @@ export const equipmentService = (server) => {
     return await query.getMany();
   };
 
-  const getOneEquipment = async (id: string): Promise<IEquipment> => {
-    return await server.db.equipments.findOne({ _id: id });
+  const getOneEquipment = async (id: string): Promise<Equipment> => {
+    const equipment = await server.db.equipments.find({ where: { _id: id } });
+    return equipment;
   };
 
   const updateEquipment = async (

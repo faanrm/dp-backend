@@ -1,4 +1,4 @@
-import { DeepPartial } from "typeorm";
+import { DeepPartial, In } from "typeorm";
 import { Component } from "./components.entity";
 export const componentsServices = (server) => {
   const createComponents = async (
@@ -8,9 +8,10 @@ export const componentsServices = (server) => {
     createdComponents.quantity = componentsData.quantity;
 
     if (componentsData.materialC) {
-      const material = await server.db.materials.findOne(
-        componentsData.materialC._id
-      );
+      const materialIds = componentsData.materialC.map((mt) => mt._id);
+      const material = await server.db.materials.findOne({
+        where: { _id: In(materialIds) },
+      });
       if (material) {
         createdComponents.materialC = material;
       } else {
@@ -18,9 +19,10 @@ export const componentsServices = (server) => {
       }
     }
     if (componentsData.productC) {
-      const product = await server.db.products.findOne(
-        componentsData.productC._id
-      );
+      const productIds = componentsData.productC.map((prd) => prd._id);
+      const product = await server.db.products.findOne({
+        where: { _id: In(productIds) },
+      });
       if (product) {
         componentsData.productC = product;
       } else {
@@ -39,9 +41,10 @@ export const componentsServices = (server) => {
     }
     Object.assign(components, componentsData);
     if (componentsData.productC) {
-      const product = await server.db.products.findOne(
-        componentsData.productC._id
-      );
+      const productIds = componentsData.productC.map((cp) => cp._id);
+      const product = await server.db.products.findOne({
+        where: { _id: In(productIds) },
+      });
       if (product) {
         components.setProduct(product);
       } else {
@@ -50,16 +53,16 @@ export const componentsServices = (server) => {
     }
 
     if (componentsData.materialC) {
-      const material = await server.db.materials.findOne(
-        componentsData.materialC._id
-      );
+      const materialIds = componentsData.materialC.map((mt) => mt._id);
+      const material = await server.db.components.find({
+        where: { _id: In(materialIds) },
+      });
       if (material) {
         components.setMaterial(material);
       } else {
         throw new Error("Material not found");
       }
     }
-
     return await server.db.components.save(components);
   };
   const deleteComponents = async (id: string): Promise<void> => {

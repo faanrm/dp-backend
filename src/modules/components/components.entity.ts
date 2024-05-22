@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { Product } from "../products/products.entity";
 import { Material } from "../material/material.entity";
@@ -23,12 +25,36 @@ export class Component {
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @ManyToOne(() => Product, (product) => product.components)
-  productC: Product;
-  @ManyToOne(() => Product, (product) => product.components)
-  materialC: Material;
-
+  @ManyToMany(() => Product, (product) => product.components, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: "components-product",
+    joinColumn: {
+      name: "componentId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "productId",
+      referencedColumnName: "_id",
+    },
+  })
+  productC: Product[];
+  @ManyToMany(() => Material, (material) => material.components, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: "components-material",
+    joinColumn: {
+      name: "componentId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "materialId",
+      referencedColumnName: "_id",
+    },
+  })
+  materialC: Material[];
   public clone(): Component {
     const clonedComponent = new Component();
     clonedComponent._id = uuid();
@@ -36,11 +62,11 @@ export class Component {
     return clonedComponent;
   }
 
-  public setProduct(product: Product): void {
+  public setProduct(product: Product[]): void {
     this.productC = product;
   }
 
-  public setMaterial(material: Material): void {
+  public setMaterial(material: Material[]): void {
     this.materialC = material;
   }
 }

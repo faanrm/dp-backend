@@ -12,7 +12,7 @@ export default async function productHandler(server) {
     }
   });
   server.get(
-    "/:id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Params: IProduct }>,
       reply: FastifyReply
@@ -43,7 +43,7 @@ export default async function productHandler(server) {
     }
   );
   server.put(
-    "/:id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Params: IProduct; Body: IProduct }>,
       reply: FastifyReply
@@ -63,7 +63,7 @@ export default async function productHandler(server) {
     }
   );
   server.delete(
-    "/:id",
+    "/:_id",
     async (
       request: FastifyRequest<{ Params: IProduct }>,
       reply: FastifyReply

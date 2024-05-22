@@ -1,4 +1,4 @@
-import { DeepPartial } from "typeorm";
+import { DeepPartial, In } from "typeorm";
 import { Operation } from "./operations.entity";
 export default function operationServices(server) {
   const createOperation = async (
@@ -7,14 +7,14 @@ export default function operationServices(server) {
     const createdOperation = new Operation().clone();
     createdOperation.duration = operationData.duration as Date;
     if (operationData.materialO) {
-      const material = await server.db.materials.findOne(
-        operationData.materialO._id
-      );
-      if (material) {
-        createdOperation.materialO = material;
-      } else {
-        throw new Error("Material not found");
+      const materialIds = operationData.equipmentO.map((mat) => mat._id);
+      const material = await server.db.materials.find({
+        where: { _id: In(materialIds) },
+      });
+      if (material.length !== materialIds.length) {
+        throw new Error("Some material not found");
       }
+      createdOperation.materialO = material;
     }
     return await server.db.operations.save(createdOperation);
   };
@@ -28,25 +28,29 @@ export default function operationServices(server) {
     }
     Object.assign(operation, operationData);
     if (operationData.equipmentO) {
-      const equipment = await server.db.equipments.findOne(
-        operationData.equipmentO._id
-      );
-      if (!equipment) {
-        throw new Error("Equipment not found");
+      const equipmentIds = operationData.equipmentO.map((eq) => eq._id);
+      const equipment = await server.db.equipments.find({
+        where: { _id: In(equipmentIds) },
+      });
+      if (equipment.length !== equipmentIds.length) {
+        throw new Error("Some equipment not found");
       }
-      operation.setEquipment(equipment);
+      operation.equipmentO = equipment;
     }
     if (operationData.materialO) {
-      const material = await server.db.Material.findOne(
-        operationData.materialO._id
-      );
-      if (!material) {
-        throw new Error("Material not found");
+      const materialIds = operationData.equipmentO.map((mat) => mat._id);
+      const material = await server.db.materials.find({
+        where: { _id: In(materialIds) },
+      });
+      if (material.length !== materialIds.length) {
+        throw new Error("Some material not found");
       }
-      operation.setMaterial(material);
+      operation.materialO = material;
     }
-    return await server.db.operations.save(operation);
+    await server.db.operations.save(operation);
+    return operation;
   };
+
   const getAllOperation = async (): Promise<Operation[]> => {
     return await server.db.operations.find();
   };
@@ -72,11 +76,29 @@ export default function operationServices(server) {
     operation.setEquipment(equipment);
     await server.db.operations.save(operation);
   };
+  const assignOperationToProductPlan = async (
+    operationId: string,
+    productPlanId: string
+  ): Promise<void> => {
+    const operation = await server.db.operations.findOne({ _id: operationId });
+    if (!operation) {
+      throw new Error("Operation not found");
+    }
+    const productPlan = await server.db.productPlans.findOne({
+      _id: productPlanId,
+    });
+    if (!productPlan) {
+      throw new Error("Product plan not found");
+    }
+    operation.productPlan = productPlan;
+    await server.db.operations.save(operation);
+  };
   return {
     deleteOperation,
     getAllOperation,
+    assignEquipmentToOperation,
     updateOperation,
     createOperation,
-    assignEquipmentToOperation,
+    assignOperationToProductPlan,
   };
 }

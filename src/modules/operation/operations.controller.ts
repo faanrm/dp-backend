@@ -26,7 +26,7 @@ export default async function operationHandler(server) {
     }
   );
   server.put(
-    "/:id",
+    "/:_id",
     async (
       req: FastifyRequest<{ Body: Operation; Params: { id: string } }>,
       reply: FastifyReply
@@ -44,7 +44,7 @@ export default async function operationHandler(server) {
     }
   );
   server.delete(
-    "/:id",
+    "/:_id",
     async (
       req: FastifyRequest<{ Params: { id: string } }>,
       reply: FastifyReply

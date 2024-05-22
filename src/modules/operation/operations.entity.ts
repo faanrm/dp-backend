@@ -33,12 +33,25 @@ export class Operation {
     },
     inverseJoinColumn: {
       name: "equipmentId",
-      referencedColumnName: "id",
+      referencedColumnName: "_id",
     },
   })
   equipmentO: Equipment[];
-  @ManyToOne(() => Material, (material) => material.operations)
-  materialO: Material;
+  @ManyToMany(() => Material, (material) => material.operations, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: "operation-material",
+    joinColumn: {
+      name: "operationId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "materialId",
+      referencedColumnName: "_id",
+    },
+  })
+  materialO: Material[];
   @ManyToOne(() => ProductPlan, (productPlan) => productPlan.operations)
   productPlan: ProductPlan;
   public clone(): Operation {
@@ -50,7 +63,7 @@ export class Operation {
   public setEquipment(equipment: Equipment[]): void {
     this.equipmentO = equipment;
   }
-  public setMaterial(material: Material): void {
+  public setMaterial(material: Material[]): void {
     this.materialO = material;
   }
 }
