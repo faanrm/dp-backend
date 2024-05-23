@@ -10,7 +10,7 @@ import {
 } from "typeorm";
 import { Product } from "../products/products.entity";
 import { Status } from "./orderProduct.interface";
-
+import { v4 as uuid } from "uuid";
 @Entity()
 export class orderProduct {
   @PrimaryGeneratedColumn("uuid")
@@ -41,12 +41,11 @@ export class orderProduct {
 
   public clone(): orderProduct {
     const clonedOrderProduct: DeepPartial<orderProduct> = {
-      _id: this._id,
+      _id: uuid(),
       order_quantity: this.order_quantity,
       order_date: this.order_date,
       delivery_date: this.delivery_date,
       status: this.status,
-      product: this.product ? this.product.clone() : undefined,
     };
     const clone = Object.assign(new orderProduct(), clonedOrderProduct);
     return clone;
