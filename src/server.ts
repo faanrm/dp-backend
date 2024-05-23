@@ -6,6 +6,8 @@ import materialHandler from "./modules/material/material.controller";
 import componentsHandler from "./modules/components/components.controller";
 import operationHandler from "./modules/operation/operations.controller";
 import productHandler from "./modules/products/product.controller";
+import orderProduchHandler from "./modules/orderProduct/orderProduct.controller";
+
 function createServer() {
   const server = fastify();
   server.register(require("fastify-cors"));
@@ -40,7 +42,7 @@ function createServer() {
   server.register(materialHandler, { prefix: "/material" });
   server.register(componentsHandler, { prefix: "/components" });
   server.register(operationHandler, { prefix: "/operations" });
-
+  server.register(orderProduchHandler, { prefix: "/order" });
   server.setErrorHandler((error, req, res) => {
     req.log.error(error.toString());
     res.send({ error });

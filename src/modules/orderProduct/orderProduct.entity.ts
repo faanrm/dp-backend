@@ -7,6 +7,8 @@ import {
   ManyToOne,
   OneToMany,
   DeepPartial,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { Product } from "../products/products.entity";
 import { Status } from "./orderProduct.interface";
@@ -36,9 +38,19 @@ export class orderProduct {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Product, (product) => product.productOrders)
-  product: Product;
-
+  @ManyToMany(() => Product, (product) => product.orderProducts)
+  @JoinTable({
+    name: "product_order",
+    joinColumn: {
+      name: "orderId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "productId",
+      referencedColumnName: "_id",
+    },
+  })
+  productO: Product[];
   public clone(): orderProduct {
     const clonedOrderProduct: DeepPartial<orderProduct> = {
       _id: uuid(),

@@ -1,23 +1,24 @@
 import { orderProduct } from "./orderProduct.entity";
 import { IOrderProduct } from "./orderProduct.interface";
-import { DeepPartial } from "typeorm";
+import { DeepPartial, In } from "typeorm";
 import { Status } from "./orderProduct.interface";
 export const orderProductServices = (server) => {
   const createOrderProduct = async (
-    orderProductData: DeepPartial<IOrderProduct>
-  ): Promise<IOrderProduct> => {
+    orderProductData: DeepPartial<orderProduct>
+  ): Promise<orderProduct> => {
     const createdOrderProduct = new orderProduct().clone();
     createdOrderProduct.order_number = orderProductData.order_number;
     createdOrderProduct.order_quantity = orderProductData.order_quantity;
     createdOrderProduct.order_date = orderProductData.order_date as Date;
     createdOrderProduct.delivery_date = orderProductData.delivery_date as Date;
     createdOrderProduct.status = orderProductData.status;
-    if (orderProductData.product) {
-      const product = await server.db.products.findOne(
-        orderProductData.product._id
-      );
+    if (orderProductData.productO) {
+      const productIds = orderProductData.productO.map((prd) => prd._id);
+      const product = await server.db.products.findOne({
+        where: { _id: In(productIds) },
+      });
       if (product) {
-        createdOrderProduct.product = orderProductData.product;
+        createdOrderProduct.productO = product;
       }
     }
     return await server.db.orderProducts.save(createdOrderProduct);
@@ -37,8 +38,8 @@ export const orderProductServices = (server) => {
   };
   const updateOrderProduct = async (
     id: string,
-    orderProductData: DeepPartial<IOrderProduct>
-  ): Promise<IOrderProduct> => {
+    orderProductData: DeepPartial<orderProduct>
+  ): Promise<orderProduct> => {
     const orderProduct = await server.db.orderProducts.findOne({ _id: id });
     if (!orderProduct) {
       throw new Error("Order product not found");
@@ -54,15 +55,15 @@ export const orderProductServices = (server) => {
       (orderProductData.delivery_date as Date) || orderProduct.delivery_date;
     orderProduct.status = orderProductData.status || orderProduct.status;
 
-    if (orderProductData.product) {
-      const product = await server.db.products.findOne(
-        orderProductData.product._id
-      );
+    if (orderProductData.productO) {
+      const productIds = orderProductData.productO.map((prd) => prd._id);
+      const product = await server.db.products.findOne({
+        where: { _id: In(productIds) },
+      });
       if (product) {
-        orderProduct.product = orderProductData.product;
+        orderProductData.productO = product;
       }
     }
-
     return await server.db.orderProducts.save(orderProduct);
   };
 

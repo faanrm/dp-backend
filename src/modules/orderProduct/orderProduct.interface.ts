@@ -1,3 +1,6 @@
+import { DeepPartial } from "typeorm";
+import { Product } from "../products/products.entity";
+
 export interface IOrderProduct {
   _id: string;
   order_quantity: number;
@@ -7,7 +10,7 @@ export interface IOrderProduct {
   created_at: Date;
   updated_at: Date;
   order_number: number;
-  product: any;
+  product: DeepPartial<Product>;
 }
 
 export enum Status {

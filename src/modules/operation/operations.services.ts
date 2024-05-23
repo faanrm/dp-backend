@@ -1,23 +1,18 @@
 import { DeepPartial, In } from "typeorm";
 import { Operation } from "./operations.entity";
+import {
+  CreateOperationStrategy,
+  UpdateOperationStrategy,
+} from "./operation.interface";
 export default function operationServices(server) {
   const createOperation = async (
     operationData: DeepPartial<Operation>
   ): Promise<any> => {
-    const createdOperation = new Operation().clone();
-    createdOperation.duration = operationData.duration as Date;
-    createdOperation.state = operationData.state;
-    if (operationData.materialO) {
-      const materialIds = operationData.equipmentO.map((mat) => mat._id);
-      const material = await server.db.materials.find({
-        where: { _id: In(materialIds) },
-      });
-      if (material.length !== materialIds.length) {
-        throw new Error("Some material not found");
-      }
-      createdOperation.materialO = material;
-    }
-    return await server.db.operations.save(createdOperation);
+    const operation = new Operation();
+    Object.assign(operation, operationData);
+    const strategy = new CreateOperationStrategy(server);
+    await strategy.execute(operation);
+    return operation;
   };
   const updateOperation = async (
     id: string,
@@ -28,27 +23,10 @@ export default function operationServices(server) {
       throw new Error("Operation not found");
     }
     Object.assign(operation, operationData);
-    if (operationData.equipmentO) {
-      const equipmentIds = operationData.equipmentO.map((eq) => eq._id);
-      const equipment = await server.db.equipments.find({
-        where: { _id: In(equipmentIds) },
-      });
-      if (equipment.length !== equipmentIds.length) {
-        throw new Error("Some equipment not found");
-      }
-      operation.equipmentO = equipment;
-    }
-    if (operationData.materialO) {
-      const materialIds = operationData.equipmentO.map((mat) => mat._id);
-      const material = await server.db.materials.find({
-        where: { _id: In(materialIds) },
-      });
-      if (material.length !== materialIds.length) {
-        throw new Error("Some material not found");
-      }
-      operation.materialO = material;
-    }
-    await server.db.operations.save(operation);
+
+    const strategy = new UpdateOperationStrategy(server);
+    await strategy.execute(operation);
+
     return operation;
   };
 

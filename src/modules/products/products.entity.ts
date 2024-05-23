@@ -34,11 +34,21 @@ export class Product {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => orderProduct, (productOrder) => productOrder.product, {
+  @ManyToMany(() => orderProduct, (productOrd) => productOrd.productO, {
     cascade: true,
   })
-  productOrders: orderProduct[];
-
+  @JoinTable({
+    name: "product_order",
+    joinColumn: {
+      name: "productId",
+      referencedColumnName: "_id",
+    },
+    inverseJoinColumn: {
+      name: "orderId",
+      referencedColumnName: "_id",
+    },
+  })
+  orderProducts: orderProduct[];
   @ManyToMany(() => Component, (component) => component.productC)
   @JoinTable({
     name: "components-product",

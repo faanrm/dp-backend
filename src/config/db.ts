@@ -41,8 +41,8 @@ export default fp(async (server) => {
       components: connection.getRepository(Component),
       orderProducts: connection.getRepository(orderProduct),
       productPlans: connection.getRepository(ProductPlan),
-      qualityControl: connection.getRepository(QualityControl),
-      maintenance: connection.getRepository(Maintenance),
+      qualityControls: connection.getRepository(QualityControl),
+      maintenances: connection.getRepository(Maintenance),
     });
   } catch (error) {
     console.log(error);
