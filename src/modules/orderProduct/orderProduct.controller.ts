@@ -15,20 +15,39 @@ export default async function orderProduchHandler(server) {
   server.post(
     "/",
     async (
-      req: FastifyRequest<{ Body: IOrderProduct }>,
+      req: FastifyRequest<{
+        Body: { productId: string; orderQuantity: number };
+      }>,
       reply: FastifyReply
     ): Promise<void> => {
       try {
-        const createdProduct = await serv.createOrderProduct(req.body);
+        const { productId, orderQuantity } = req.body;
+        const product = await server.db.products.findOne(productId);
+        if (!product) {
+          return reply.code(404).send({ message: "Product not found" });
+        }
+
+        if (product.quantity < orderQuantity) {
+          return reply.code(400).send({
+            message: "Not enough quantity available for this product",
+          });
+        }
+
+        const newOrderProduct = await serv.createOrderProduct(
+          product,
+          orderQuantity
+        );
+
         return reply.code(201).send({
           message: "Order product created",
-          data: createdProduct,
+          data: newOrderProduct,
         });
       } catch (error) {
         return reply.code(500).send({ message: error.message });
       }
     }
   );
+
   server.put(
     "/:_id",
     async (

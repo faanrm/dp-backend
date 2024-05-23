@@ -2,26 +2,29 @@ import { orderProduct } from "./orderProduct.entity";
 import { IOrderProduct } from "./orderProduct.interface";
 import { DeepPartial, In } from "typeorm";
 import { Status } from "./orderProduct.interface";
+import factoryOrder from "./orderProduct.models";
+import { Product } from "../products/products.entity";
 export const orderProductServices = (server) => {
   const createOrderProduct = async (
-    orderProductData: DeepPartial<orderProduct>
+    product: Product,
+    orderQuantity: number
   ): Promise<orderProduct> => {
-    const createdOrderProduct = new orderProduct().clone();
-    createdOrderProduct.order_number = orderProductData.order_number;
-    createdOrderProduct.order_quantity = orderProductData.order_quantity;
-    createdOrderProduct.order_date = orderProductData.order_date as Date;
-    createdOrderProduct.delivery_date = orderProductData.delivery_date as Date;
-    createdOrderProduct.status = orderProductData.status;
-    if (orderProductData.productO) {
-      const productIds = orderProductData.productO.map((prd) => prd._id);
-      const product = await server.db.products.findOne({
-        where: { _id: In(productIds) },
-      });
-      if (product) {
-        createdOrderProduct.productO = product;
-      }
+    const existingProduct = await server.db.products.findOne(product._id);
+    if (!existingProduct) {
+      throw new Error("Product not found");
     }
-    return await server.db.orderProducts.save(createdOrderProduct);
+
+    const orderProductData = factoryOrder.createOrderProduct(
+      product,
+      orderQuantity
+    );
+    if (existingProduct.quantity < orderQuantity) {
+      throw new Error("Not enough quantity available for this product");
+    }
+    existingProduct.quantity -= orderQuantity;
+    await server.db.products.save(existingProduct);
+
+    return await server.db.orderProducts.save(orderProductData);
   };
   const getAllorderProduct = async (options?: {
     status?: Status | undefined;

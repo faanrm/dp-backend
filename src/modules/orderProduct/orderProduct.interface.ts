@@ -1,6 +1,9 @@
 import { DeepPartial } from "typeorm";
 import { Product } from "../products/products.entity";
-
+import { orderProduct } from "./orderProduct.entity";
+export interface OrderProductFactory {
+  createOrderProduct(product: Product, orderQuantity: number): orderProduct;
+}
 export interface IOrderProduct {
   _id: string;
   order_quantity: number;
