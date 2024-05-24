@@ -22,8 +22,8 @@ export class Equipment {
   type: EType;
   @Column({ nullable: true })
   name?: string;
-  @Column({ nullable: true })
-  uptime?: Date;
+  @Column({ nullable: true, type: "timestamp" })
+  startTime?: Date;
   @Column({ default: 6 })
   lifePoint: number;
   @CreateDateColumn()
@@ -53,9 +53,17 @@ export class Equipment {
     const clonedEquipment: DeepPartial<Equipment> = {
       state: this.state,
       type: this.type,
-      uptime: this.uptime,
+      startTime: this.startTime,
     };
     const clone = Object.assign(new Equipment(), clonedEquipment);
     return clone;
+  }
+  get uptime(): number {
+    if (!this.startTime) {
+      return 0;
+    }
+    const currentTime = new Date();
+    const diffInMilliseconds = currentTime.getTime() - this.startTime.getTime();
+    return diffInMilliseconds / 1000;
   }
 }

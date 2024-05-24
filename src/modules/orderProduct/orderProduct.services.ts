@@ -13,7 +13,6 @@ export const orderProductServices = (server) => {
     if (!existingProduct) {
       throw new Error("Product not found");
     }
-
     const orderProductData = factoryOrder.createOrderProduct(
       product,
       orderQuantity

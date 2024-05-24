@@ -8,7 +8,7 @@ import {
 export default function operationServices(server) {
   const createOperation = async (
     operationData: DeepPartial<Operation>
-  ): Promise<any> => {
+  ): Promise<Operation> => {
     const operation = new Operation();
     Object.assign(operation, operationData);
     const strategy = new CreateOperationStrategy(server);
