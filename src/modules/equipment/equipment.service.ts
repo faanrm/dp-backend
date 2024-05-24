@@ -1,16 +1,36 @@
 import { DeepPartial } from "typeorm";
 import { Equipment } from "./equipment.entity";
 import { IEquipment, EType, IState } from "./equipment.interface";
+import {
+  machineForMaintain,
+  machineForProduction,
+  machineForQuality,
+} from "./equipment.interface";
+import { IEquipmentFactory } from "./equipment.interface";
 
 export const equipmentService = (server) => {
   const createEquipment = async (
     equipmentData: DeepPartial<IEquipment>
   ): Promise<IEquipment> => {
-    const createdEquipment = new Equipment().clone();
-    Object.assign(createdEquipment, equipmentData);
-    return await server.db.equipments.save(createdEquipment);
-  };
+    let machineFactory: IEquipmentFactory;
 
+    switch (equipmentData.type) {
+      case EType.machineForProduction:
+        machineFactory = machineForProduction;
+        break;
+      case EType.machineForQuality:
+        machineFactory = machineForQuality;
+        break;
+      case EType.machineForMaintain:
+        machineFactory = machineForMaintain;
+        break;
+      default:
+        throw new Error(`Invalid equipment type: ${equipmentData.type}`);
+    }
+    const machine = machineFactory.createMachine(equipmentData.name);
+    Object.assign(machine, equipmentData);
+    return await server.db.equipments.save(machine);
+  };
   const getAllEquipment = async (options?: {
     state?: IState | undefined;
     type?: EType[] | undefined;

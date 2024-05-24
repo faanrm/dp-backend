@@ -3,6 +3,7 @@ import { Equipment } from "./equipment.entity";
 export interface IEquipment {
   _id: string;
   state: IState;
+  name: string;
   type: EType;
   startTime: Date;
   updated_at: Date;
@@ -31,7 +32,7 @@ class MachineForProductionFactory implements IEquipmentFactory {
     const machine = new Equipment();
     machine.type = EType.machineForProduction;
     machine.name = name;
-    machine.startTime = new Date();
+    //    machine.startTime = new Date();
     return machine;
   }
 }
@@ -41,7 +42,7 @@ class MachineForQualityFactory implements IEquipmentFactory {
     const machine = new Equipment();
     machine.type = EType.machineForQuality;
     machine.name = name;
-    machine.startTime = new Date();
+    // machine.startTime = new Date();
     return machine;
   }
 }
@@ -51,7 +52,7 @@ class MachineForMaintainFactory implements IEquipmentFactory {
     const machine = new Equipment();
     machine.type = EType.machineForMaintain;
     machine.name = name;
-    machine.startTime = new Date();
+    //machine.startTime = new Date();
     return machine;
   }
 }
