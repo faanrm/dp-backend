@@ -12,6 +12,7 @@ import {
 import { EType, IState } from "./equipment.interface";
 import { Maintenance } from "../maintenance/maintenance.entity";
 import { Operation } from "../operation/operations.entity";
+import { EquipmentUsage } from "../equipmentUsage/equipment.usage.entity";
 @Entity()
 export class Equipment {
   @PrimaryGeneratedColumn("uuid")
@@ -22,8 +23,6 @@ export class Equipment {
   type: EType;
   @Column({ nullable: true })
   name?: string;
-  @Column({ nullable: true, type: "timestamp" })
-  startTime?: Date;
   @Column({ default: 6 })
   lifePoint: number;
   @CreateDateColumn()
@@ -49,21 +48,14 @@ export class Equipment {
     cascade: true,
   })
   maintenancePlans: Maintenance[];
+  @OneToMany(() => EquipmentUsage, (equipmentUsage) => equipmentUsage.equipment)
+  equipmentUsages: EquipmentUsage[];
   public clone(): Equipment {
     const clonedEquipment: DeepPartial<Equipment> = {
       state: this.state,
       type: this.type,
-      startTime: this.startTime,
     };
     const clone = Object.assign(new Equipment(), clonedEquipment);
     return clone;
-  }
-  get uptime(): number {
-    if (!this.startTime) {
-      return 0;
-    }
-    const currentTime = new Date();
-    const diffInMilliseconds = currentTime.getTime() - this.startTime.getTime();
-    return diffInMilliseconds / 1000;
   }
 }

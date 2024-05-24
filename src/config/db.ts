@@ -11,6 +11,7 @@ import { Component } from "../modules/components/components.entity";
 import { Operation } from "../modules/operation/operations.entity";
 import { Maintenance } from "../modules/maintenance/maintenance.entity";
 import { QualityControl } from "../modules/qualityControl/qualityControl.entity";
+import { EquipmentUsage } from "../modules/equipmentUsage/equipment.usage.entity";
 export default fp(async (server) => {
   try {
     const connectionOptions = await getConnectionOptions();
@@ -27,6 +28,7 @@ export default fp(async (server) => {
         ProductPlan,
         Maintenance,
         QualityControl,
+        EquipmentUsage,
       ],
     });
 
@@ -43,6 +45,7 @@ export default fp(async (server) => {
       productPlans: connection.getRepository(ProductPlan),
       qualityControls: connection.getRepository(QualityControl),
       maintenances: connection.getRepository(Maintenance),
+      equipmentUsages: connection.getRepository(EquipmentUsage),
     });
   } catch (error) {
     console.log(error);

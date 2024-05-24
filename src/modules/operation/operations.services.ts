@@ -4,6 +4,7 @@ import {
   CreateOperationStrategy,
   UpdateOperationStrategy,
 } from "./operation.interface";
+import { EquipmentUsage } from "../equipmentUsage/equipment.usage.entity";
 
 export default function operationServices(server) {
   const createOperation = async (
@@ -54,7 +55,13 @@ export default function operationServices(server) {
       throw new Error("Equipment not found");
     }
     operation.setEquipment(equipment);
+    const equipmentUsage = new EquipmentUsage();
+    equipmentUsage.equipment = equipment;
+    equipmentUsage.operation = operation;
+    equipmentUsage.startTime = new Date();
     await server.db.operations.save(operation);
+    await server.db.equipmentUsages.save(equipmentUsage);
+    return operation;
   };
   const assignOperationToProductPlan = async (
     operationId: string,

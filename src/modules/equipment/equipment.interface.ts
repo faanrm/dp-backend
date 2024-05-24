@@ -5,7 +5,6 @@ export interface IEquipment {
   state: IState;
   name: string;
   type: EType;
-  startTime: Date;
   updated_at: Date;
   maintenancePlans: Maintenance[];
 }

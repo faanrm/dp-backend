@@ -75,14 +75,21 @@ export const equipmentService = (server) => {
     }
     return equipment;
   };
-  const changeEquipmentState = async (id: string): Promise<IEquipment> => {
+  const changeEquipmentState = async (
+    id: string,
+    newState: IState
+  ): Promise<IEquipment> => {
     const equipmentToUpdate = await server.db.equipments.findOne({ _id: id });
     if (!equipmentToUpdate) {
       throw new Error("Equipment not found");
     }
-    equipmentToUpdate.state = IState;
+    if (!(newState in IState)) {
+      throw new Error("Invalid state");
+    }
+    equipmentToUpdate.state = newState;
     return await server.db.equipments.save(equipmentToUpdate);
   };
+
   const decrementLifePoint = async (id: string): Promise<IEquipment> => {
     const equipment = await server.db.equipments.findOne({ _id: id });
     if (!equipment) {

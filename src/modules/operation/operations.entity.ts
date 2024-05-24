@@ -7,12 +7,14 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from "typeorm";
 import { ProductPlan } from "../productPlan/productPlan.entity";
 import { Equipment } from "../equipment/equipment.entity";
 import { Material } from "../material/material.entity";
 import { v4 as uuid } from "uuid";
 import { OperationState } from "./operation.interface";
+import { EquipmentUsage } from "../equipmentUsage/equipment.usage.entity";
 @Entity()
 export class Operation {
   @PrimaryGeneratedColumn("uuid")
@@ -61,6 +63,9 @@ export class Operation {
   materialO: Material[];
   @ManyToOne(() => ProductPlan, (productPlan) => productPlan.operations)
   productPlan: ProductPlan;
+
+  @OneToMany(() => EquipmentUsage, (equipmentUsage) => equipmentUsage.operation)
+  equipmentUsages: EquipmentUsage[];
   public clone(): Operation {
     const clonedOperation = new Operation();
     clonedOperation._id = uuid();
