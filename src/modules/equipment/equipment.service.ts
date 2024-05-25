@@ -90,15 +90,6 @@ export const equipmentService = (server) => {
     return await server.db.equipments.save(equipmentToUpdate);
   };
 
-  const decrementLifePoint = async (id: string): Promise<IEquipment> => {
-    const equipment = await server.db.equipments.findOne({ _id: id });
-    if (!equipment) {
-      throw new Error("Equipment no found");
-    }
-    equipment.lifePoint = equipment.lifePoint - 1;
-    return await server.db.equipments.save(equipment);
-  };
-
   const getMaintenanceHistory = async (id: string): Promise<IEquipment> => {
     const equipment = await server.db.equipments.findOne({
       where: { _id: id },
@@ -119,7 +110,6 @@ export const equipmentService = (server) => {
     getOneEquipment,
     updateEquipment,
     deleteEquipment,
-    decrementLifePoint,
     getMaintenanceHistory,
   };
 };

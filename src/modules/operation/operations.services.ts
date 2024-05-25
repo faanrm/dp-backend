@@ -5,7 +5,8 @@ import {
   UpdateOperationStrategy,
 } from "./operation.interface";
 import { EquipmentUsage } from "../equipmentUsage/equipment.usage.entity";
-
+import { equipmentService } from "../equipment/equipment.service";
+import { OperationState } from "./operation.interface";
 export default function operationServices(server) {
   const createOperation = async (
     operationData: DeepPartial<Operation>
@@ -80,7 +81,31 @@ export default function operationServices(server) {
     operation.productPlan = productPlan;
     await server.db.operations.save(operation);
   };
+  const makeOperationFinish = async (
+    operationId: string,
+    equipmentId: string,
+    newState: string
+  ): Promise<Operation> => {
+    const operation = await server.db.operations.findOne({ _id: operationId });
+    if (!operation) {
+      throw new Error("Operation not found");
+    }
+    if (!(newState in OperationState)) {
+      throw new Error("state invalid");
+    }
+    const equipment = await server.db.equipments.findOne({ _id: equipmentId });
+    if (!equipment) {
+      throw new Error("Equipment not found");
+    }
+    operation.state = OperationState.finish;
+    equipment.lifePoint = equipment.lifePoint - 1;
+    await server.db.equipments.save(equipment);
+    await server.db.operations.save(operation);
+
+    return operation;
+  };
   return {
+    makeOperationFinish,
     deleteOperation,
     getAllOperation,
     assignEquipmentToOperation,
