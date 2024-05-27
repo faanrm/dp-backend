@@ -4,6 +4,7 @@ import { DeepPartial, In } from "typeorm";
 import { Status } from "./orderProduct.interface";
 import factoryOrder from "./orderProduct.models";
 import { Product } from "../products/products.entity";
+import { OrderProductIterator } from "./orderProduct.interface";
 export const orderProductServices = (server) => {
   const createOrderProduct = async (
     product: Product,
@@ -27,12 +28,13 @@ export const orderProductServices = (server) => {
   };
   const getAllorderProduct = async (options?: {
     status?: Status | undefined;
-  }): Promise<IOrderProduct> => {
+  }): Promise<OrderProductIterator> => {
     const query = server.db.orderProducts.createQueryBuilder("orderProduct");
     if (options?.status) {
       query.where("orderProduct.status = :status", { status: options.status });
     }
-    return await query.getMany();
+    const orderProducts = await query.getMany();
+    return new OrderProductIterator(orderProducts);
   };
 
   const deleteProduct = async (id: string): Promise<void> => {

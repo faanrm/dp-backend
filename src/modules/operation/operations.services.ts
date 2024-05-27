@@ -5,7 +5,6 @@ import {
   UpdateOperationStrategy,
 } from "./operation.interface";
 import { EquipmentUsage } from "../equipmentUsage/equipment.usage.entity";
-import { equipmentService } from "../equipment/equipment.service";
 import { OperationState } from "./operation.interface";
 export default function operationServices(server) {
   const createOperation = async (
