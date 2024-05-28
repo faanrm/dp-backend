@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { Result } from "./qualityControl.interface";
 import { Product } from "../products/products.entity";
+import { v4 as uuid } from "uuid";
 @Entity()
 export class QualityControl {
   @PrimaryGeneratedColumn("uuid")
@@ -22,4 +23,13 @@ export class QualityControl {
   created_at: Date;
   @UpdateDateColumn()
   updated_at: Date;
+
+  public clone(): QualityControl {
+    const clonedQualityControl = new QualityControl();
+    clonedQualityControl._id = uuid();
+    clonedQualityControl.result = this.result;
+    clonedQualityControl.created_at = this.created_at;
+    clonedQualityControl.updated_at = this.updated_at;
+    return clonedQualityControl;
+  }
 }
