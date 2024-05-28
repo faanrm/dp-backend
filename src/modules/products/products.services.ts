@@ -1,6 +1,7 @@
 import { IProduct, IProductWithMaterials } from "./products.interface";
 import { DeepPartial } from "typeorm";
 import productBuilder from "./products.models";
+import { Product } from "./products.entity";
 export const productsService = (server) => {
   const createProduct = async (
     productData: DeepPartial<IProduct>
@@ -15,7 +16,7 @@ export const productsService = (server) => {
     const createdProduct = await server.db.products.save(builtProduct);
     return createdProduct;
   };
-  const getAllProducts = async (): Promise<IProduct[]> => {
+  const getAllProducts = async (): Promise<Product[]> => {
     return server.db.products.find();
   };
 
