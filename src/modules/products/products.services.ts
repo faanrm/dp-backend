@@ -17,7 +17,8 @@ export const productsService = (server) => {
     return createdProduct;
   };
   const getAllProducts = async (): Promise<Product[]> => {
-    return server.db.products.find();
+    const product = await server.db.products.find();
+    return product;
   };
 
   const getProductById = async (id: string): Promise<IProduct | null> => {

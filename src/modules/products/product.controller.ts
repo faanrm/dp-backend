@@ -1,20 +1,22 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { productsService } from "./products.services";
 import { IProduct } from "./products.interface";
+import { Product } from "./products.entity";
 export default async function productHandler(server) {
   const serv = productsService(server);
   server.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const products = serv.getAllProducts();
+      const products = await serv.getAllProducts();
       return reply.code(200).send(products);
     } catch (error) {
       return reply.code(500).send({ error: error.message });
     }
   });
+
   server.get(
     "/:_id",
     async (
-      request: FastifyRequest<{ Params: IProduct }>,
+      request: FastifyRequest<{ Params: Product }>,
       reply: FastifyReply
     ) => {
       try {
