@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { materialServices } from "./material.services";
 import { IMaterial } from "./material.interface";
+import { Material } from "./material.entity";
 export default async function materialHandler(server) {
   const serv = materialServices(server);
   server.get("/", async (request: FastifyRequest, reply: FastifyReply) => {
@@ -65,6 +66,18 @@ export default async function materialHandler(server) {
         return reply
           .code(500)
           .send({ message: "Internal servor error", details: error.message });
+      }
+    }
+  );
+  server.get(
+    "/:_id",
+    async (req: FastifyRequest<{ Params: Material }>, reply: FastifyReply) => {
+      try {
+        const id = req.params._id;
+        const material = await serv.getMaterialById(id);
+        return reply.code(200).send(material);
+      } catch (error) {
+        return reply.code(500).send({ message: error.message });
       }
     }
   );

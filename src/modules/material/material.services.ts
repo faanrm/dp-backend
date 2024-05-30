@@ -33,10 +33,18 @@ export const materialServices = (server) => {
     }
     return material;
   };
+  const getMaterialById = async (id: string): Promise<Material> => {
+    const material = await server.db.materials.findOne({ _id: id });
+    if (!material) {
+      throw new Error("No material Found");
+    }
+    return material;
+  };
   return {
     addMaterial,
     getAllMaterial,
     updateMaterial,
     deleteMaterial,
+    getMaterialById,
   };
 };
