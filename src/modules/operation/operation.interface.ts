@@ -30,6 +30,16 @@ class CreateOperationStrategy implements OperationStrategy {
       }
       createdOperation.materialO = material;
     }
+    if (operation.equipmentO) {
+      const equipmentIds = operation.equipmentO.map((eq) => eq._id);
+      const equipment = await this.server.db.equipments.find({
+        where: { _id: In(equipmentIds) },
+      });
+      if (equipment.length !== equipmentIds.length) {
+        throw new Error("Some material not found");
+      }
+      createdOperation.equipmentO = equipment;
+    }
     await this.server.db.operations.save(createdOperation);
   }
 }
