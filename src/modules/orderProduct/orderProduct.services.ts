@@ -21,10 +21,19 @@ export const orderProductServices = (server) => {
       throw new Error("Not enough quantity available for this product");
     }
     existingProduct.quantity -= orderQuantity;
+
+    const savedOrderProductData = await server.db.orderProducts.save(
+      orderProductData
+    );
+
+    savedOrderProductData.productO = [existingProduct];
+    await server.db.orderProducts.save(savedOrderProductData);
+
     await server.db.products.save(existingProduct);
 
-    return await server.db.orderProducts.save(orderProductData);
+    return savedOrderProductData;
   };
+
   const getAllorderProduct = async (options?: {
     status?: Status | undefined;
   }): Promise<IOrderProduct> => {
