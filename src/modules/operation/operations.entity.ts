@@ -15,22 +15,29 @@ import { Material } from "../material/material.entity";
 import { v4 as uuid } from "uuid";
 import { OperationState } from "./operation.interface";
 import { EquipmentUsage } from "../equipmentUsage/equipment.usage.entity";
+
 @Entity()
 export class Operation {
   @PrimaryGeneratedColumn("uuid")
   _id: string;
-  @Column()
+
+  @Column({ nullable: true })
   duration: Date;
+
   @Column({
     type: "enum",
     enum: OperationState,
     default: OperationState.in_progress,
+    nullable: true,
   })
   state: string;
-  @CreateDateColumn()
+
+  @CreateDateColumn({ nullable: true })
   created_at: Date;
-  @UpdateDateColumn()
+
+  @UpdateDateColumn({ nullable: true })
   updated_at: Date;
+
   @ManyToMany(() => Equipment, (equipment) => equipment.operations, {
     cascade: true,
   })
@@ -46,6 +53,7 @@ export class Operation {
     },
   })
   equipmentO: Equipment[];
+
   @ManyToMany(() => Material, (material) => material.operations, {
     cascade: true,
   })
@@ -61,11 +69,19 @@ export class Operation {
     },
   })
   materialO: Material[];
-  @ManyToOne(() => ProductPlan, (productPlan) => productPlan.operations)
+
+  @ManyToOne(() => ProductPlan, (productPlan) => productPlan.operations, {
+    nullable: true,
+  })
   productPlan: ProductPlan;
 
-  @OneToMany(() => EquipmentUsage, (equipmentUsage) => equipmentUsage.operation)
+  @OneToMany(
+    () => EquipmentUsage,
+    (equipmentUsage) => equipmentUsage.operation,
+    { nullable: true }
+  )
   equipmentUsages: EquipmentUsage[];
+
   public clone(): Operation {
     const clonedOperation = new Operation();
     clonedOperation._id = uuid();
@@ -73,9 +89,11 @@ export class Operation {
     clonedOperation.state = this.state;
     return clonedOperation;
   }
+
   public setEquipment(equipment: Equipment[]): void {
     this.equipmentO = equipment;
   }
+
   public setMaterial(material: Material[]): void {
     this.materialO = material;
   }
