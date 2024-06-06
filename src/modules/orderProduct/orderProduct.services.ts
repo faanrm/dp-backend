@@ -22,15 +22,13 @@ export const orderProductServices = (server) => {
     }
     existingProduct.quantity -= orderQuantity;
 
+    orderProductData.productO = [existingProduct];
+
     const savedOrderProductData = await server.db.orderProducts.save(
       orderProductData
     );
 
-    savedOrderProductData.productO = [existingProduct];
-    await server.db.orderProducts.save(savedOrderProductData);
-
     await server.db.products.save(existingProduct);
-
     return savedOrderProductData;
   };
 

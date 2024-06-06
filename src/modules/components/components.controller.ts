@@ -20,12 +20,12 @@ export default async function componentsHandler(server) {
   server.put(
     "/:_id",
     async (
-      request: FastifyRequest<{ Body: Component; Params: { id: string } }>,
+      request: FastifyRequest<{ Body: Component; Params: { _id: string } }>,
       reply: FastifyReply
     ) => {
       try {
         const updatedComponents = await serv.updateComponents(
-          request.params.id,
+          request.params._id,
           request.body
         );
         return reply.code(200).send(updatedComponents);
@@ -37,12 +37,12 @@ export default async function componentsHandler(server) {
   server.delete(
     "/:_id",
     async (
-      request: FastifyRequest<{ Params: { id: string } }>,
+      request: FastifyRequest<{ Params: { _id: string } }>,
       reply: FastifyReply
     ) => {
       try {
         const deletedComponents = await serv.deleteComponents(
-          request.params.id
+          request.params._id
         );
         return reply.code(200).send(deletedComponents);
       } catch (error) {

@@ -32,10 +32,10 @@ export const componentsServices = (server) => {
     return await server.db.components.save(createdComponents);
   };
   const updateComponents = async (
-    id: string,
+    _id: string,
     componentsData: DeepPartial<Component>
   ): Promise<Component> => {
-    const components = await server.db.components.findOne({ _id: id });
+    const components = await server.db.components.findOne({ _id: _id });
     if (!components) {
       throw new Error("Components not found");
     }
@@ -54,7 +54,7 @@ export const componentsServices = (server) => {
 
     if (componentsData.materialC) {
       const materialIds = componentsData.materialC.map((mt) => mt._id);
-      const material = await server.db.components.find({
+      const material = await server.db.materials.findOne({
         where: { _id: In(materialIds) },
       });
       if (material) {
@@ -65,13 +65,14 @@ export const componentsServices = (server) => {
     }
     return await server.db.components.save(components);
   };
-  const deleteComponents = async (id: string): Promise<void> => {
-    const components = await server.db.components.delete(id);
-    if (!components) {
+  const deleteComponents = async (_id: string): Promise<void> => {
+    const components = await server.db.components.delete({ _id: _id });
+    if (!components.affected) {
       throw new Error("Components not found");
     }
-    return components;
+    return;
   };
+
   const getAllComponents = async (): Promise<Component[]> => {
     return await server.db.components.find();
   };

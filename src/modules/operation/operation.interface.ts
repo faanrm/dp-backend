@@ -20,6 +20,9 @@ class CreateOperationStrategy implements OperationStrategy {
     const createdOperation = new Operation().clone();
     createdOperation.duration = operation.duration as Date;
     createdOperation.state = operation.state;
+
+    await this.server.db.operations.save(createdOperation);
+
     if (operation.materialO) {
       const materialIds = operation.materialO.map((mat) => mat._id);
       const material = await this.server.db.materials.find({
@@ -36,10 +39,11 @@ class CreateOperationStrategy implements OperationStrategy {
         where: { _id: In(equipmentIds) },
       });
       if (equipment.length !== equipmentIds.length) {
-        throw new Error("Some material not found");
+        throw new Error("Some equipment not found");
       }
       createdOperation.equipmentO = equipment;
     }
+
     await this.server.db.operations.save(createdOperation);
   }
 }
