@@ -23,7 +23,7 @@ class CreateOperationStrategy implements OperationStrategy {
 
     if (operation.materialO) {
       const materialIds = operation.materialO.map((mat) => mat._id);
-      const material = await this.server.db.materials.find({
+      const material = await this.server.db.materials.findMany({
         where: { _id: In(materialIds) },
       });
       if (material.length !== materialIds.length) {
@@ -33,7 +33,7 @@ class CreateOperationStrategy implements OperationStrategy {
     }
     if (operation.equipmentO) {
       const equipmentIds = operation.equipmentO.map((eq) => eq._id);
-      const equipment = await this.server.db.equipments.find({
+      const equipment = await this.server.db.equipments.findMany({
         where: { _id: In(equipmentIds) },
       });
       if (equipment.length !== equipmentIds.length) {

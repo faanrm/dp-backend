@@ -12,10 +12,15 @@ export default function operationServices(server) {
   ): Promise<Operation> => {
     const operation = new Operation();
     Object.assign(operation, operationData);
+
+    await server.db.operations.save(operation);
+
     const strategy = new CreateOperationStrategy(server);
     await strategy.execute(operation);
+
     return operation;
   };
+
   const updateOperation = async (
     id: string,
     operationData: DeepPartial<Operation>
