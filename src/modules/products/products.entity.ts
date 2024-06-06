@@ -37,17 +37,6 @@ export class Product {
   @ManyToMany(() => orderProduct, (productOrd) => productOrd.productO, {
     cascade: true,
   })
-  @JoinTable({
-    name: "product_order",
-    joinColumn: {
-      name: "productId",
-      referencedColumnName: "_id",
-    },
-    inverseJoinColumn: {
-      name: "orderId",
-      referencedColumnName: "_id",
-    },
-  })
   orderProducts: orderProduct[];
   @ManyToMany(() => Component, (component) => component.productC)
   @JoinTable({
