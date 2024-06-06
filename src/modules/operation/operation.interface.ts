@@ -17,10 +17,6 @@ class CreateOperationStrategy implements OperationStrategy {
   }
 
   async execute(operation: Operation): Promise<void> {
-    const createdOperation = new Operation().clone();
-    createdOperation.duration = operation.duration as Date;
-    createdOperation.state = operation.state;
-
     if (operation.materialO) {
       const materialIds = operation.materialO.map((mat) => mat._id);
       const material = await this.server.db.materials.findMany({
@@ -29,7 +25,7 @@ class CreateOperationStrategy implements OperationStrategy {
       if (material.length !== materialIds.length) {
         throw new Error("Some material not found");
       }
-      createdOperation.materialO = material;
+      operation.materialO = material;
     }
     if (operation.equipmentO) {
       const equipmentIds = operation.equipmentO.map((eq) => eq._id);
@@ -39,10 +35,8 @@ class CreateOperationStrategy implements OperationStrategy {
       if (equipment.length !== equipmentIds.length) {
         throw new Error("Some equipment not found");
       }
-      createdOperation.equipmentO = equipment;
+      operation.equipmentO = equipment;
     }
-
-    await this.server.db.operations.save(createdOperation);
   }
 }
 
