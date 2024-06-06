@@ -28,7 +28,7 @@ export const productsService = (server) => {
     id: string,
     productData: DeepPartial<IProduct>
   ): Promise<IProduct | null> => {
-    const product = await server.db.products.findOne(id);
+    const product = await server.db.products.findOne({ _id: id });
     if (!product) return null;
 
     Object.assign(product, productData);

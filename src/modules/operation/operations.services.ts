@@ -6,6 +6,7 @@ import {
 } from "./operation.interface";
 import { EquipmentUsage } from "../equipmentUsage/equipment.usage.entity";
 import { OperationState } from "./operation.interface";
+
 export default function operationServices(server) {
   const createOperation = async (
     operationData: DeepPartial<Operation>
@@ -108,6 +109,33 @@ export default function operationServices(server) {
 
     return operation;
   };
+  async function assignMaterialsAndEquipmentToOperation(
+    operationId: string,
+    materialIds: string[],
+    equipmentIds: string[]
+  ) {
+    // Find the operation
+    const operation = await server.db.operations.findOne({
+      where: { _id: operationId },
+    });
+    if (!operation) {
+      throw new Error("Operation not found");
+    }
+
+    const materials = await server.db.materials.findByIds(materialIds);
+    if (materials.length !== materialIds.length) {
+      throw new Error("Some materials not found");
+    }
+    operation.materialO = materials;
+
+    const equipments = await server.db.equipments.findByIds(equipmentIds);
+    if (equipments.length !== equipmentIds.length) {
+      throw new Error("Some equipments not found");
+    }
+    operation.equipmentO = equipments;
+
+    await server.db.operations.save(operation);
+  }
   return {
     makeOperationFinish,
     deleteOperation,
@@ -116,5 +144,6 @@ export default function operationServices(server) {
     updateOperation,
     createOperation,
     assignOperationToProductPlan,
+    assignMaterialsAndEquipmentToOperation,
   };
 }

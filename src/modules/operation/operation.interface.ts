@@ -37,6 +37,12 @@ class CreateOperationStrategy implements OperationStrategy {
       }
       operation.equipmentO = equipment;
     }
+    const operationInDb = await this.server.db.operations.findOne({
+      where: { _id: operation._id },
+    });
+    if (!operationInDb) {
+      throw new Error("Operation not found in database");
+    }
   }
 }
 

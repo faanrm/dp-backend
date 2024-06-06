@@ -104,4 +104,28 @@ export default async function operationHandler(server) {
       } catch (error) {}
     }
   );
+  server.put(
+    "/:operationId/materials-equipments",
+    async (
+      req: FastifyRequest<{
+        Params: { operationId: string };
+        Body: { materialIds: string[]; equipmentIds: string[] };
+      }>,
+      reply: FastifyReply
+    ) => {
+      try {
+        const { materialIds, equipmentIds } = req.body;
+        await serv.assignMaterialsAndEquipmentToOperation(
+          req.params.operationId,
+          materialIds,
+          equipmentIds
+        );
+        reply.status(200).send({
+          message: "Materials and equipments assigned to operation",
+        });
+      } catch (error) {
+        reply.status(500).send({ error: error.message });
+      }
+    }
+  );
 }

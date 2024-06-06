@@ -18,9 +18,9 @@ export class Equipment {
   @PrimaryGeneratedColumn("uuid")
   _id: string;
   @Column({ type: "enum", enum: IState, default: IState.available })
-  state: string;
+  state: IState;
   @Column({ type: "enum", enum: EType, default: EType.machineForProduction })
-  type: string;
+  type: EType;
   @Column({ nullable: true })
   name?: string;
   @Column({ default: 6 })
@@ -31,17 +31,6 @@ export class Equipment {
   updated_at: Date;
 
   @ManyToMany(() => Operation, (operation) => operation.equipmentO)
-  @JoinTable({
-    name: "operation-equipment",
-    joinColumn: {
-      name: "equipmentId",
-      referencedColumnName: "_id",
-    },
-    inverseJoinColumn: {
-      name: "operationId",
-      referencedColumnName: "_id",
-    },
-  })
   operations: Operation[];
 
   @OneToMany(() => Maintenance, (maintenance) => maintenance.equipment, {
