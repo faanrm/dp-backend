@@ -21,8 +21,6 @@ class CreateOperationStrategy implements OperationStrategy {
     createdOperation.duration = operation.duration as Date;
     createdOperation.state = operation.state;
 
-    await this.server.db.operations.save(createdOperation);
-
     if (operation.materialO) {
       const materialIds = operation.materialO.map((mat) => mat._id);
       const material = await this.server.db.materials.find({
