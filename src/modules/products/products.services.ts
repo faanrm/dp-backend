@@ -23,7 +23,6 @@ export const productsService = (server) => {
   const getProductById = async (id: string): Promise<IProduct | null> => {
     return server.db.products.findOne(id);
   };
-
   const updateProduct = async (
     id: string,
     productData: DeepPartial<IProduct>
@@ -32,11 +31,13 @@ export const productsService = (server) => {
     if (!product) return null;
 
     Object.assign(product, productData);
-    return product.save();
+    await product.save();
+
+    return product;
   };
 
   const deleteProduct = async (id: string): Promise<void> => {
-    const product = await server.db.products.delete(id);
+    const product = await server.db.products.delete({ _id: id });
     if (!product) {
       throw new Error("Product not found");
     }
