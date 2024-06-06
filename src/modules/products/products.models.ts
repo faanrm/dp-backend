@@ -30,5 +30,4 @@ class ProductBuilder {
   }
 }
 
-const productBuilder = new ProductBuilder();
-export default productBuilder;
+export { ProductBuilder };

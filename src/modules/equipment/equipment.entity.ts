@@ -18,9 +18,9 @@ export class Equipment {
   @PrimaryGeneratedColumn("uuid")
   _id: string;
   @Column({ type: "enum", enum: IState, default: IState.available })
-  state: IState;
+  state: string;
   @Column({ type: "enum", enum: EType, default: EType.machineForProduction })
-  type: EType;
+  type: string;
   @Column({ nullable: true })
   name?: string;
   @Column({ default: 6 })
