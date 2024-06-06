@@ -12,7 +12,7 @@ export default function operationServices(server) {
   ): Promise<Operation> => {
     const operation = new Operation();
     Object.assign(operation, operationData);
-
+    await server.db.operations.create(operation);
     await server.db.operations.save(operation);
 
     const strategy = new CreateOperationStrategy(server);
